@@ -1,0 +1,52 @@
+TROFF TOOLS
+===========
+
+This is the port of Plan9 troff tools to Linux which probably works
+in other Unix variants with minor modifications.  The included
+programs are troff, tr2ps (dpost), eqn, tbl, and pic.
+
+SETTING UP
+==========
+
+Troff needs to access data files like macros and font description
+files.  These files are not included in this package.  The following
+commands copy the needed files from a Plan9 root filesystem (the
+Plan9 installation CD image would work too; just mount it and change
+P9 to point to its directory):
+
+  $ # prepareing current directory as the troff data folder
+  $ P9="/path/to/plan9/root"
+  $ cp -r $P9/sys/lib/troff/* .
+  $ mkdir hyphen
+  $ cp -r $P9/sys/lib/texmf/tex/generic/hyphen/hyphen.tex hyphen/
+  $ cp -r $P9/postscript ps
+
+All needed files are copied to the current folder.  Now change
+conf.mk file in the source tree so that TBASE points to this folder.
+Now it can be compiled:
+
+  $ for t in troff tr2ps eqn tbl pic; do cd $t; make; cd ..; done
+
+Next, you may want to copy the binaries to a directory in your $PATH.
+
+Because tr2ps reads a file that maps unicode character ranges in a
+troff font to 256-entry postscript fonts, the multibyte characters
+won't get displayed correctly unless suitable fonts are used.  You
+can instruct ghostscript to use Plan9 LucidaSansUnicode* fonts to
+display these characters correctly.  You can copy them from Plan9
+font folder:
+
+  $ # we are in a directory in the ghostscript font search path
+  $ cp $P9/sys/lib/ghostscript/font/* .
+  $ cp Fontmap Fontmap.p9
+  $ sed "s,/sys/lib/postscript,$P9," <Fontmap.p9 >Fontmap
+
+TODO
+====
+
+* Decide what to do about the way tr2ps maps unicode characters to
+  postscript fonts; the current approach seems too much work when
+  adding new fonts.
+* Remove the use of lex and yacc in eqn and pic.  I hate lex and yacc
+  as much as I like a well written recursive decent parser.
+* Some of the tools could be cleaned up considerably
