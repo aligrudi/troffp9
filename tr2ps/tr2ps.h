@@ -1,10 +1,7 @@
 #define MAXSPECHARS 	512
 #define MAXTOKENSIZE	128
-#define CHARLIB		TBASE "font/devutf/charlib"
+#define CHARLIB		TBASE "/font/devutf/charlib"
 #define UTFmax		3
-
-#define	RUNEGETGROUP(a)		((a >> 8) & 0xff)
-#define	RUNEGETCHAR(a)		(a & 0xff)
 
 extern FILE *fout, *ferr;
 
@@ -36,10 +33,10 @@ struct specname {
  * to by multiple character names, e.g. \(mu for multiply.
  */
 struct charent {
-	char postfontid;	/* index into pfnamtab */
-	char postcharid;	/* e.g., 0x00 */
+	char gname[32];		/* postscript glyph name */
+	char name[16];		/* character name, e.g. \(mu */
+	int charnum;		/* postscript font character number */
 	short troffcharwidth;
-	char name[16];
 	struct charent *next;
 };
 
@@ -58,11 +55,10 @@ struct psfent {
 
 struct troffont {
 	char trfontid[MAXFONTNAME];	/* the common troff font name e.g., `R' */
+	char psfontid[MAXFONTNAME];	/* the ps font name e.g, 'Times-Roman' */
 	BOOLEAN special;		/* flag says this is a special font. */
 	int spacewidth;
-	int psfmapsize;
-	struct psfent *psfmap;
-	struct charent *charent[NUMOFONTS][FONTSIZE];
+	struct charent *charent[NUMCHARS];
 };
 
 extern struct troffont troffontab[];
@@ -86,9 +82,6 @@ void loadfont(int, char *);
 void flushtext(void);
 void t_charht(int);
 void t_slant(int);
-void startstring(void);
-void endstring(void);
-int pageon(void);
 void setpsfont(int, int);
 void settrfont(void);
 int hash(char *, int);

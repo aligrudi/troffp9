@@ -9,7 +9,7 @@
 #include "comments.h"
 #include "path.h"
 
-struct strtab charcode[FONTSIZE] = {
+struct strtab charcode[256] = {
 	{4, "\\000"}, {4, "\\001"}, {4, "\\002"}, {4, "\\003"},
 	{4, "\\004"}, {4, "\\005"}, {4, "\\006"}, {4, "\\007"},
 	{4, "\\010"}, {4, "\\011"}, {4, "\\012"}, {4, "\\013"},
@@ -157,7 +157,7 @@ int pageon(void)
 
 static int stringhpos, stringvpos;
 
-void startstring(void)
+static void startstring(void)
 {
 	if (!in_string) {
 		stringhpos = hpos;
@@ -180,6 +180,20 @@ void endstring(void)
 int isinstring(void)
 {
 	return in_string;
+}
+
+void showglyph(char *s)
+{
+	if (!in_string)
+		startstring();
+	fprintf(fout, "%s", s);
+}
+
+void showglyph_byname(char *s)
+{
+	if (in_string)
+		endstring();
+	fprintf(fout, "/%s %d %d g\n", s, hpos, vpos);
 }
 
 void startpage(void)

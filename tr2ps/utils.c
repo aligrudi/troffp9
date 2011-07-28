@@ -35,7 +35,7 @@ void hmot(int x)
 {
 	int delta;
 
-	if ( x < expecthmot - 1 || x > expecthmot + 1) {
+	if (x < expecthmot - 1 || x > expecthmot + 1) {
 		delta = x - expecthmot;
 		if (curtrofffontid < 0 || curtrofffontid >= troffontcnt) {
 			fprintf(ferr, "troffontcnt=%d curtrofffontid=%d\n",
@@ -67,7 +67,7 @@ void vmot(int y)
 struct charent *findglyph(int trfid, uc_t rune, char *stoken)
 {
 	struct charent *cp;
-	cp = troffontab[trfid].charent[RUNEGETGROUP(rune)][RUNEGETCHAR(rune)];
+	cp = troffontab[trfid].charent[rune];
 
 	for (; cp; cp = cp->next) {
 		if (cp->name) {
@@ -88,9 +88,7 @@ struct charent *findglyph(int trfid, uc_t rune, char *stoken)
 void glyphout(uc_t rune, char *stoken, int specialflag)
 {
 	struct charent *cp;
-	struct troffont *tfp;
-	struct psfent *psfp;
-	int i, t;
+	int i;
 	int fontid;	/* this is the troff font table index, not the mounted font table index */
 	int mi = -1, wid;
 	uc_t r;
@@ -99,9 +97,6 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 
 	/* check current font for the character, special or not */
 	fontid = curtrofffontid;
-	if (debug)
-		fprintf(ferr, "\tlooking through current font: trying %s\n",
-			troffontab[fontid].trfontid);
 	cp = findglyph(fontid, rune, stoken);
 	if (cp)
 		goto foundit;
@@ -128,16 +123,10 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 		if (mi == fontmnt)
 			error(FATAL, "current troff font is not mounted, botch!\n");
 		for (i = (mi + 1) % fontmnt; i != mi; i = (i+1) % fontmnt) {
-			if (!*fontmtab[i]) {
-				if (debug)
-					fprintf(ferr, "fontmtab[%d]=0x%p, fontmnt=%d\n",
-						i, fontmtab[i], fontmnt);
+			if (!*fontmtab[i])
 				continue;
-			}
 			fontid = findtfn(fontmtab[i], TRUE);
-			if (debug)
-				fprintf(ferr, "\tlooking through special fonts: trying %s\n",
-					troffontab[fontid].trfontid);
+			/* looking in special fonts */
 			if (troffontab[fontid].special) {
 				cp = findglyph(fontid, rune, stoken);
 				if (cp)
@@ -192,24 +181,10 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 	}
 
 foundit:
-	t = ((cp->postfontid & 0xff) << 8) | (cp->postcharid & 0xff);
-	if (debug)
-		fprintf(ferr, "runeout(0x%x)<%C> postfontid=0x%x postcharid=0x%x troffcharwidth=%d\n",
-			rune, rune, cp->postfontid, cp->postcharid, cp->troffcharwidth);
+	/* set the correct font */
+	setpsfont(findpfn(troffontab[fontid].psfontid, 1), fontsize);
 
-	tfp = &troffontab[fontid];
-	psfp = NULL;
-	for (i = 0; i < tfp->psfmapsize; i++) {
-		psfp = &tfp->psfmap[i];
-		if (t >= psfp->start && t <= psfp->end)
-			break;
-	}
-	if (i >= tfp->psfmapsize)
-		error(FATAL, "character <0x%x> does not have a Postscript font defined.\n", rune);
-
-	setpsfont(psfp->psftid, fontsize);
-
-	if (t == 0x0001) {	/* character is in charlib */
+	if (cp->charnum == 0x0001) {	/* character is in charlib */
 		endstring();
 		if (pageon()) {
 			fprintf(fout, "%d %d m ", hpos, vpos);
@@ -239,12 +214,13 @@ foundit:
 		}
 		expecthmot = cp->troffcharwidth * fontsize / unitwidth;
 	} else if (isinstring() || rune != ' ') {
-		startstring();
 		if (pageon()) {
 			if (rune == ' ')
-				fprintf(fout, " ");
-			else
-				fprintf(fout, "%s", charcode[RUNEGETCHAR(t)].str);
+				showglyph(" ");
+			else if (cp->charnum < 256)
+				showglyph(charcode[cp->charnum].str);
+			else if (*cp->gname)
+				showglyph_byname(cp->gname);
 		}
 		expecthmot = cp->troffcharwidth * fontsize / unitwidth;
 	}

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "tr2ps.h"
 
-char devname[20] = { 'u', 't', 'f', '\0' };
+char devname[20] = "utf";
 int resolution;
 int minx, miny;
 

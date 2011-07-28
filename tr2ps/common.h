@@ -7,8 +7,7 @@ typedef	int	BOOLEAN;
 #define	TRUE	1
 #define	FALSE	0
 
-#define NUMOFONTS 0x100
-#define FONTSIZE 0x100
+#define NUMCHARS	0x10000
 
 extern char *programname;
 extern char *inputfilename;
@@ -28,10 +27,9 @@ struct strtab {
 };
 
 extern struct strtab charcode[];
-BOOLEAN pageon(void);
-void startstring(void);
+int pageon(void);
 void endstring(void);
-BOOLEAN isinstring(void);
+int isinstring(void);
 void startpage(void);
 void endpage(void);
 int cat(char *);

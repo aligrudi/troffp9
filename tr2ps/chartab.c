@@ -1,11 +1,7 @@
-/*
- *    Unicode   |     PostScript
- *  start  end  | offset  font name
- * 0x0000 0x00ff  0x00   LucidaSansUnicode00
- */
+#include <ctype.h>
+#include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -122,99 +118,6 @@ int findpfn(char *fontname, int insflg)
 	return -1;
 }
 
-static char postroffdirname[] = TBASE "/ps/troff";	/* "/sys/lib/postscript/troff/"; */
-static char troffmetricdirname[] = TBASE "/font";	/* "/sys/lib/troff/font/devutf/"; */
-
-int readpsfontdesc(char *fontname, int trindex)
-{
-	static char filename[1 << 12];
-	int fd;
-	struct ustr *ustr;
-	int errorflg = 0, line = 1, rv;
-	int start, end, offset;
-	int startfont, endfont, startchar, endchar, pfid;
-	char psfontnam[128];
-	struct troffont *tp;
-
-	if (debug)
-		fprintf(ferr, "readpsfontdesc(%s,%d)\n", fontname, trindex);
-	sprintf(filename, "%s/%s", postroffdirname, fontname);
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0) {
-		error(WARNING, "cannot open file %s\n", filename);
-		return 0;
-	}
-	ustr = ustr_fill(fd);
-	close(fd);
-
-	do {
-		offset = 0;
-		if ((rv = ustr_int(ustr, &start)) == 0) {
-			errorflg = 1;
-			error(WARNING, "file %s:%d illegal start value\n", filename, line);
-		} else if (rv < 0) {
-			break;
-		}
-		if ((rv = ustr_int(ustr, &end)) == 0) {
-			errorflg = 1;
-			error(WARNING, "file %s:%d illegal end value\n",
-				filename, line);
-		} else if (rv < 0) {
-			break;
-		}
-		if ((rv = ustr_int(ustr, &offset)) < 0) {
-			errorflg = 1;
-			error(WARNING, "file %s:%d illegal offset value\n",
-				filename, line);
-		}
-		if ((rv = ustr_str(ustr, psfontnam, 128)) == 0) {
-			errorflg = 1;
-			error(WARNING, "file %s:%d illegal fontname value\n",
-				filename, line);
-		} else if (rv < 0) {
-			break;
-		}
-		ustr_eol(ustr);
-		if (!errorflg) {
-			struct psfent *psfentp;
-			startfont = RUNEGETGROUP(start);
-			startchar = RUNEGETCHAR(start);
-			endfont = RUNEGETGROUP(end);
-			endchar = RUNEGETCHAR(end);
-			pfid = findpfn(psfontnam, 1);
-			if (startfont != endfont) {
-				error(WARNING, "font descriptions must not cross 256 glyph block boundary\n");
-				errorflg = 1;
-				break;
-			}
-			tp = &(troffontab[trindex]);
-			tp->psfmap = galloc(tp->psfmap, ++(tp->psfmapsize) *
-				sizeof(struct psfent), "readpsfontdesc():psfmap");
-			psfentp = &(tp->psfmap[tp->psfmapsize-1]);
-			psfentp->start = start;
-			psfentp->end = end;
-			psfentp->offset = offset;
-			psfentp->psftid = pfid;
-			if (debug) {
-				fprintf(ferr, "\tpsfmap->start=0x%x\n", start);
-				fprintf(ferr, "\tpsfmap->end=0x%x\n", end);
-				fprintf(ferr, "\tpsfmap->offset=0x%x\n", offset);
-				fprintf(ferr, "\tpsfmap->pfid=0x%x\n", pfid);
-			}
-			if (debug) {
-				fprintf(ferr, "%x %x ", start, end);
-				if (offset)
-					fprintf(ferr, "%x ", offset);
-				fprintf(ferr, "%s\n", psfontnam);
-			}
-			line++;
-		}
-	} while (errorflg != 1);
-	ustr_free(ustr);
-	return 1;
-}
-
 static int utf8len(char *s)
 {
 	int i = 0;
@@ -234,15 +137,16 @@ int readtroffmetric(char *fontname, int trindex)
 	int errorflg = 0, line = 1, rv;
 	struct charent **cp;
 	char stoken[128];
+	char gname[128];
 	char str[1 << 12];
 	int ntoken;
 	uc_t troffchar, quote;
-	int width, flag, charnum, thisfont, thischar;
+	int width, flag, charnum;
 	int specharflag;
 
 	if (debug)
 		fprintf(ferr, "readtroffmetric(%s,%d)\n", fontname, trindex);
-	sprintf(filename, "%s/dev%s/%s", troffmetricdirname, devname, fontname);
+	sprintf(filename, "%s/dev%s/%s", FONTDIR, devname, fontname);
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0) {
@@ -281,6 +185,7 @@ int readtroffmetric(char *fontname, int trindex)
 				error(WARNING, "file %s:%d illegal token\n",
 					filename, line);
 			}
+			strcpy(troffontab[trindex].psfontid, stoken);
 			if (rv < 0)
 				break;
 		} else if (strcmp(stoken, "spacewidth") == 0) {
@@ -292,16 +197,12 @@ int readtroffmetric(char *fontname, int trindex)
 			if (rv < 0)
 				break;
 			troffontab[trindex].spacewidth = ntoken;
-			thisfont = RUNEGETGROUP(' ');
-			thischar = RUNEGETCHAR(' ');
-			for (cp = &(troffontab[trindex].charent[thisfont][thischar]); *cp != 0; cp = &((*cp)->next))
+			for (cp = &(troffontab[trindex].charent[' ']); *cp != 0; cp = &((*cp)->next))
 				if  (strcmp((*cp)->name, " ") == 0)
 					break;
 
 			if (*cp == 0)
 				*cp = malloc(sizeof(struct charent));
-			(*cp)->postfontid = thisfont;
-			(*cp)->postcharid = thischar; 
 			(*cp)->troffcharwidth = ntoken;
 			(*cp)->next = 0;
 			strcpy((*cp)->name, " ");
@@ -334,12 +235,11 @@ int readtroffmetric(char *fontname, int trindex)
 		}
 		if (rv < 0)
 			break;
-		if (quote == '"') {
-			/* need some code here */
+		if (quote == '"')
 			goto flush;
-		} else {
+		else
 			ustr_back(ustr);
-		}
+		gname[0] = '\0';
 
 		if ((rv = ustr_int(ustr, &width)) == 0) {
 			errorflg = 1;
@@ -362,54 +262,38 @@ int readtroffmetric(char *fontname, int trindex)
 		}
 		if (rv < 0)
 			break;
-flush:
 		rv = ustr_line(ustr, str, sizeof(str));
-		/* stash the crap from the end of the line for debugging */
-		if (debug) {
-			if (rv == 0) {
-				fprintf(ferr, "premature EOF\n");
-				return 0;
-			}
-			str[strlen(str) - 1] = '\0';
+		/* copy ps glyph name if available */
+		if (*str) {
+			char *s = str;
+			char *e;
+			while (isspace(*s))
+				s++;
+			e = s;
+			while (*e && !isspace(*s))
+				e++;
+			*e = '\0';
+			strcpy(gname, s);
 		}
+
+flush:
 		line++;
 		uc_dec(&troffchar, stoken);
-		if (specharflag) {
-			if (debug)
-				fprintf(ferr, "%s %d  %d 0x%x %s # special\n",
-					stoken, width, flag, charnum, str);
-		}
 		if (strcmp(stoken, "---") == 0) {
-			thisfont = RUNEGETGROUP(charnum);
-			thischar = RUNEGETCHAR(charnum);
+			troffchar = charnum;
 			stoken[0] = '\0';
-		} else {
-			thisfont = RUNEGETGROUP(troffchar);
-			thischar = RUNEGETCHAR(troffchar);
 		}
-		for (cp = &(troffontab[trindex].charent[thisfont][thischar]); *cp != 0; cp = &((*cp)->next)) {
-			if (debug)
-				fprintf(ferr, "installing <%s>, found <%s>\n",
-					stoken, (*cp)->name);
+		for (cp = &(troffontab[trindex].charent[troffchar]); *cp != 0; cp = &((*cp)->next)) {
 			if  (strcmp((*cp)->name, stoken) == 0)
 				break;
 		}
 		if (!*cp)
 			*cp = malloc(sizeof(struct charent));
-		(*cp)->postfontid = RUNEGETGROUP(charnum);
-		(*cp)->postcharid = RUNEGETCHAR(charnum); 
+		(*cp)->charnum = charnum;
 		(*cp)->troffcharwidth = width;
 		(*cp)->next = 0;
 		strcpy((*cp)->name, stoken);
-		if (debug) {
-			if (specharflag)
-				fprintf(ferr, "%s", stoken);
-			fprintf(ferr, " %d  %d 0x%x %s # psfontid=0x%x pscharid=0x%x thisfont=0x%x thischar=0x%x\n",
-				width, flag, charnum, str,
-				(*cp)->postfontid,
-				(*cp)->postcharid,
-				thisfont, thischar);
-		}
+		strcpy((*cp)->gname, gname);
 	}
 	ustr_free(ustr);
 	return 1;
@@ -426,14 +310,8 @@ flush:
 int findtfn(char *fontname, int insflg)
 {
 	struct troffont *tp;
-	int i, j;
+	int i;
 
-	if (debug) {
-		if (fontname == 0)
-			fprintf(stderr, "findtfn(0x%p,%d)\n", fontname, insflg);
-		else
-			fprintf(stderr, "findtfn(%s,%d)\n", fontname, insflg);
-	}
 	for (i = 0; i < troffontcnt; i++) {
 		if (!*troffontab[i].trfontid) {
 			error(WARNING, "findtfn:troffontab[%d].trfontid=0x%x, botch!\n",
@@ -449,15 +327,10 @@ int findtfn(char *fontname, int insflg)
 		strcpy(tp->trfontid, fontname);
 		tp->special = FALSE;
 		tp->spacewidth = 0;
-		tp->psfmapsize = 0;
-		tp->psfmap = 0;
-		for (i = 0; i < NUMOFONTS; i++)
-			for (j = 0; j < FONTSIZE; j++)
-				tp->charent[i][j] = 0;
+		for (i = 0; i < NUMCHARS; i++)
+			tp->charent[i] = NULL;
 		troffontcnt++;
-		if (!readtroffmetric(fontname, troffontcnt-1))
-			return -3;
-		if (!readpsfontdesc(fontname, troffontcnt-1))
+		if (!readtroffmetric(fontname, troffontcnt - 1))
 			return -3;
 		return troffontcnt - 1;
 	}
