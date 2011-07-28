@@ -73,7 +73,7 @@ void hyphen(Tchar *wp)
 		}
 }
 
-static alpha(Tchar i)	/* non-zero if really alphabetic */
+static int alpha(Tchar i)	/* non-zero if really alphabetic */
 {
 	if (ismot(i))
 		return 0;
@@ -467,8 +467,8 @@ static int readpats(void)
 	FILE *fp;
 	char buf[200], buf1[200];
 
-	if ((fp = fopen(TEXHYPHENS, "r")) == NULL
-	 && (fp = fopen(DWBalthyphens, "r")) == NULL) {
+	if ((fp = fopen(TEXHYPHENS, "r")) == NULL &&
+			(fp = fopen(ALTHYPHENS, "r")) == NULL) {
 		ERROR "warning: can't find hyphen.tex" WARN;
 		return 0;
 	}

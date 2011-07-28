@@ -440,7 +440,7 @@ nl2:
 }
 
 
-findn1(int a)
+int findn1(int a)
 {
 	int i, j;
 
@@ -452,7 +452,7 @@ findn1(int a)
 				break;
 		}
 	}
-	return(i);
+	return i;
 }
 
 
@@ -472,7 +472,7 @@ void chkpn(void)
 }
 
 
-findt(int a)
+int findt(int a)
 {
 	int i, j, k;
 
@@ -480,7 +480,7 @@ findt(int a)
 	if (dip != d) {
 		if (dip->dimac && (i = dip->ditrap - a) > 0)
 			k = i;
-		return(k);
+		return k;
 	}
 	for (i = 0; i < NTRAP; i++) {
 		if (mlist[i]) {
@@ -495,11 +495,11 @@ findt(int a)
 	i = pl - a;
 	if (k > i)
 		k = i;
-	return(k);
+	return k;
 }
 
 
-findt1(void)
+int findt1(void)
 {
 	int i;
 
@@ -507,7 +507,7 @@ findt1(void)
 		i = dip->dnl;
 	else 
 		i = numtabp[NL].val;
-	return(findt(i));
+	return findt(i);
 }
 
 
@@ -534,7 +534,7 @@ e1:
 }
 
 
-movword(void)
+int movword(void)
 {
 	int w;
 	Tchar i, *wp;
@@ -575,7 +575,7 @@ movword(void)
 	}
 	if (nel >= 0) {
 		nwd++;
-		return(0);	/* line didn't fill up */
+		return 0;	/* line didn't fill up */
 	}
 	if (TROFF)
 		xbits((Tchar)HYPHEN, 1);
@@ -643,7 +643,7 @@ void setnel(void)
 }
 
 
-getword(int x)
+int getword(int x)
 {
 	int j, k;
 	Tchar i, *wp;
@@ -692,7 +692,7 @@ g0:
 		pendw = wordp;
 		nflush = 0;
 		flushi();
-		return(1);
+		return 1;
 	}
 	if (hyoff != 1) {
 		if (j == ohc) {
@@ -751,7 +751,7 @@ rtn:
 	pendw = 0;
 	*hyp++ = 0;
 	setnel();
-	return(noword);
+	return noword;
 }
 
 

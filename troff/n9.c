@@ -14,7 +14,7 @@ Tchar setz(void)
 
 	if (!ismot(i = getch()))
 		i |= ZBIT;
-	return(i);
+	return i;
 }
 
 void setline(void)
@@ -76,13 +76,13 @@ s1:
 }
 
 
-eat(int c)
+int eat(int c)
 {
 	int i;
 
 	while ((i = cbits(getch())) != c && i != '\n')
 		;
-	return(i);
+	return i;
 }
 
 
@@ -484,5 +484,5 @@ rtn:
 	gchtab[tabch] = TABBIT;
 	gchtab[ldrch] |= LDRBIT;
 	numtabp[HP].val = savepos;
-	return(jj);
+	return jj;
 }

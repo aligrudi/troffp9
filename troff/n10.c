@@ -164,7 +164,7 @@ void n_ptinit(void)
 	if ((p = getenv("NROFFTERM")) != 0)
 		strcpy(devname, p);
 	if (termtab[0] == 0)
-		strcpy(termtab,DWBntermdir);
+		strcpy(termtab, NTERMDIR);
 	if (fontdir[0] == 0)
 		strcpy(fontdir, "");
 	if (devname[0] == 0)
@@ -182,7 +182,7 @@ void n_ptinit(void)
 	bdtab[3] = 3;
 	bdtab[4] = 3;
 
-	/* hyphalg = 0;	/* for testing */
+	/* hyphalg = 0;	for testing */
 
 	strcat(termtab, devname);
 	if ((fp = fopen(termtab, "r")) == NULL) {
@@ -378,17 +378,17 @@ void ptout1(void)
 				oput(k);
 			}
 		} else if (k >= t.tfont.nchars) {	/* BUG -- not really understood */
-/* fprintf(stderr, "big char %d, name %s\n", k, chname(k)); /* */
+			/* fprintf(stderr, "big char %d, name %s\n", k, chname(k));  */
 			oputs(chname(k)+1);	/* BUG: should separate Troffchar and MBchar... */
 		} else if (t.tfont.wp[k].str == 0) {
-/* fprintf(stderr, "nostr char %d, name %s\n", k, chname(k)); /* */
+			/* fprintf(stderr, "nostr char %d, name %s\n", k, chname(k)); */
 			oputs(chname(k)+1);	/* BUG: should separate Troffchar and MBchar... */
 		} else if (t.tfont.wp[k].str[0] == MBchar) {	/* parse() puts this on */
-/* fprintf(stderr, "MBstr char %d, name %s\n", k, chname(k)); /* */
+			/* fprintf(stderr, "MBstr char %d, name %s\n", k, chname(k)); */
 			oputs(t.tfont.wp[k].str+1);
 		} else {
 			int oj = j;
-/* fprintf(stderr, "str char %d, name %s\n", k, chname(k)); /* */
+			/* fprintf(stderr, "str char %d, name %s\n", k, chname(k)); */
 			codep = t.tfont.wp[k].str+1;	/* Troffchar by default */
 			while (*codep != 0) {
 				if (*codep & 0200) {

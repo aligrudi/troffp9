@@ -18,18 +18,13 @@
 #ifndef NTERMDIR
 #define NTERMDIR	"lib/term/tab."
 #endif
-#ifndef TDEVNAME
-#define TDEVNAME	"post"
-#endif
-#ifndef NDEVNAME
-#define NDEVNAME	"37"
-#endif
 #ifndef TEXHYPHENS
 #define	TEXHYPHENS	"/usr/lib/tex/macros/hyphen.tex"
 #endif
-#ifndef ALTHYPHENS
-#define	ALTHYPHENS	"lib/tmac/hyphen.tex"	/* another place to look */
-#endif
+
+#define TDEVNAME	"utf"
+#define NDEVNAME	"utf"
+#define	ALTHYPHENS	TEXHYPHENS	/* another place to look */
 
 typedef	unsigned char	Uchar;
 typedef unsigned short	Ushort;
@@ -238,8 +233,8 @@ extern	char	errbuf[];
 #define	MOT	(01uL << 16)	/* motion character indicator */
 #define	VMOT	(01uL << 30)	/* vertical motion bit */
 #define	NMOT	(01uL << 29)	/* negative motion indicator */
-/* #define	MOTV	(MOT|VMOT|NMOT)	/* motion flags */
-/* #define	MAXMOT	(~MOTV)		/* maximum motion permitted */
+/* #define	MOTV	(MOT|VMOT|NMOT)	motion flags */
+/* #define	MAXMOT	(~MOTV)		maximum motion permitted */
 #define	MAXMOT	0xFFFF
 
 #define	ismot(n)	((n) & MOT)

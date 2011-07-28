@@ -8,7 +8,6 @@
 #include "tdef.h"
 #include "fns.h"
 #include "ext.h"
-#include "dwbinit.h"
 
 #define MAXCBYTES		6
 
@@ -16,24 +15,6 @@
 #include <time.h>
 
 char	*Version	= "March 11, 1994";
-
-#ifndef DWBVERSION
-#define DWBVERSION      "???"
-#endif
-
-char	*DWBfontdir = FONTDIR;
-char	*DWBntermdir = NTERMDIR;
-char	*DWBalthyphens = ALTHYPHENS;
-char	*DWBhomedir = "";
-
-dwbinit dwbpaths[] = {
-	&DWBfontdir, NULL, 0,
-	&DWBntermdir, NULL, 0,
-	&DWBalthyphens, NULL, 0,
-	&DWBhomedir, NULL, 0,
-	NULL, nextf, NS,
-	NULL, NULL, 0
-};
 
 int	TROFF	= 1;	/* assume we started in troff... */
 
@@ -64,7 +45,6 @@ int main(int argc, char *argv[])
 		p = progname;
 	else
 		p++;
-	DWBinit(progname, dwbpaths);
 	if (strcmp(p, "nroff") == 0)
 		TROFF = 0;
 #ifdef UNICODE
@@ -147,8 +127,7 @@ int main(int argc, char *argv[])
 			save_tty();
 			break;
 		case 'V':
-			fprintf(stdout, "%croff: DWB %s\n", 
-					TROFF ? 't' : 'n', DWBVERSION);
+			fprintf(stdout, "%croff\n", TROFF ? 't' : 'n');
 			exit(0);
 		case 't':
 			if (argv[0][2] != '\0')
@@ -246,7 +225,7 @@ void init2(void)
 	copyf = raw = 0;
 	sprintf(buf, ".ds .T %s\n", devname);
 	cpushback(buf);
-	sprintf(buf, ".ds .P %s\n", DWBhomedir);
+	sprintf(buf, ".ds .P %s\n", "");
 	cpushback(buf);
 	numtabp[CD].val = -1;	/* compensation */
 	nx = mflg;
@@ -859,7 +838,7 @@ n1:
 }
 
 
-popf(void)
+int popf(void)
 {
 	--ifi;
 	if (ifi < 0) {
@@ -869,7 +848,7 @@ popf(void)
 	numtabp[CD].val = cfline[ifi];	/* restore line counter */
 	ip = ipl[ifi];			/* input pointer */
 	ifile = ifl[ifi];		/* input FILE * */
-	return(0);
+	return 0;
 }
 
 
@@ -950,7 +929,7 @@ int getname(void)
 
 void caseso(void)
 {
-	FILE *fp;
+	FILE *fp = NULL;
 
 	lgf++;
 	nextf[0] = 0;

@@ -52,9 +52,9 @@ void t_ptinit(void)
 		devname[sizeof devname-1] = 0;
 	}
 	if (termtab[0] == 0)
-		strcpy(termtab, DWBfontdir);
+		strcpy(termtab, FONTDIR);
 	if (fontdir[0] == 0)
-		strcpy(fontdir, DWBfontdir);
+		strcpy(fontdir, FONTDIR);
 	if (devname[0] == 0)
 		strcpy(devname, TDEVNAME);
 	hyf = 1;

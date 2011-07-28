@@ -95,7 +95,7 @@ void pchar1(Tchar i)
 		return;
 	if (tflg) {	/* transparent mode, undiverted */
 		if (print)			/* assumes that it's ok to print */
-			/* OUT "%c", j PUT;	/* i.e., is ascii */
+			/* OUT "%c", j PUT;	i.e., is ascii */
 			outascii(i);
 		return;
 	}

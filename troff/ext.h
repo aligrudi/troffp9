@@ -152,9 +152,9 @@ extern	int	nchtab;
 extern Numtab *numtabp;
 
 /* these characters are used as various signals or values
-/* in miscellaneous places.
-/* values are set in specnames in t10.c
-*/
+ * in miscellaneous places.
+ * values are set in specnames in t10.c
+ */
 
 extern int	c_hyphen;
 extern int	c_emdash;
@@ -173,12 +173,3 @@ extern int	c_boxrule;
 extern int	c_lefthand;
 extern int	c_dagger;
 extern int	c_isalnum;
-
-/*
- * String pointers for DWB pathname management.
- */
-
-extern char	*DWBfontdir;
-extern char	*DWBntermdir;
-extern char	*DWBalthyphens;
-
