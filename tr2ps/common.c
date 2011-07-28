@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include "common.h"
@@ -81,77 +82,52 @@ int char_no = 0;
 int line_no = 0;
 int page_no = 0;		/* page number in a document */
 int pages_printed = 0;
-static int pplistmaxsize=0;
 
-static unsigned char *pplist=0;	/* bitmap list for storing pages to print */
+static struct {
+	int beg;
+	int end;
+} pplist[128];		/* list of pages to print */
+static int pplist_cnt;
 
 void pagelist(char *list)
 {
-	char c;
-	int n, m;
-	int state, start;
+	char *next, *dash;
 
-	if (list == 0)
-		return;
-	state = 1;
-	start = 0;
-	while ((c=*list) != '\0') {
-		n = 0;
-		while (isdigit(c)) {
-			n = n * 10 + c - '0';
-			c = *++list;
-		}
-		switch (state) {
-		case 1:
-			start = n;
-		case 2:
-			if (n / 8 + 1 > pplistmaxsize) {
-				pplistmaxsize = n / 8 + 1;
-				pplist = galloc(pplist, n / 8 + 1, "page list");
-			}
-			for (m = start; m <= n; m++)
-				pplist[m / 8] |= 1 << (m % 8);
-			break;
-		}
-		switch (c) {
-		case '-':
-			state = 2;
-			list++;
-			break;
-		case ',':
-			state = 1;
-			list++;
-			break;
-		case '\0':
-			break;
-		}
+	while (list && *list) {
+		next = strchr(list, ',');
+		dash = strchr(list, '-');
+		pplist[pplist_cnt].beg = atoi(list);
+		if (dash && (!next || dash < next))
+			pplist[pplist_cnt].end = atoi(dash + 1);
+		else
+			pplist[pplist_cnt].end = atoi(list);
+		list = next ? next + 1 : NULL;
+		pplist_cnt++;
 	}
 }
 
 int pageon(void)
 {
 	extern int debug;
-	static int privdebug = FALSE;
+	static int _debug;		/* previous value of debug */
+	int i;
 
-	if (pplist == 0 && page_no != 0) {
-		if (privdebug && !debug) {
-			privdebug = FALSE;
+	for (i = 0; i < pplist_cnt; i++)
+		if (page_no >= pplist[i].beg && page_no <= pplist[i].end)
+			break;
+
+	if (pplist_cnt == 0 && page_no != 0 || i < pplist_cnt) {
+		if (_debug && !debug) {
+			_debug = FALSE;
 			debug = TRUE;
 		}
-		return TRUE;	/* no page list, print all pages */
-	}
-	if (page_no / 8 < pplistmaxsize && (pplist[page_no / 8] & 1 << (page_no % 8))) {
-		if (privdebug && !debug) {
-			privdebug = FALSE;
-			debug = TRUE;
-		}
-		return TRUE;
+		return 1;	/* no page list, print all pages */
 	} else {
-		if (!privdebug && debug) {
-			privdebug = TRUE;
+		if (!_debug && debug) {
+			_debug = TRUE;
 			debug = FALSE;
 		}
-		return FALSE;
+		return 0;
 	}
 }
 
@@ -241,18 +217,6 @@ int cat(char *filename)
 	if (n != 0)
 		return 1;
 	return 0;
-}
-
-extern int debug;
-void *galloc(void *ptr, int size, char *perstr)
-{
-	void *x;
-
-	if ((x = realloc(ptr, size)) == 0) {
-		perror(perstr);
-		exit(1);
-	}
-	return x;
 }
 
 static char *errorstrings[] = {
