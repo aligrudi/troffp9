@@ -69,15 +69,10 @@ struct charent *findglyph(int trfid, uc_t rune, char *stoken)
 	struct charent *cp;
 	cp = troffontab[trfid].charent[rune];
 
-	for (; cp; cp = cp->next) {
-		if (cp->name) {
-			if (debug)
-				fprintf(ferr, "looking for <%s>, have <%s> in font %s\n",
-					stoken, cp->name, troffontab[trfid].trfontid);
+	for (; cp; cp = cp->next)
+		if (cp->name)
 			if (strcmp(cp->name, stoken) == 0)
 				break;
-		}
-	}
 	return cp;
 }
 

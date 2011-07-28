@@ -129,13 +129,27 @@ static int utf8len(char *s)
 	return i;
 }
 
+struct charent *findglyph_ins(int trfid, uc_t rune, char *stoken)
+{
+	struct charent **cp;
+
+	cp = &troffontab[trfid].charent[rune];
+	for (; *cp; cp = &(*cp)->next)
+		if ((*cp)->name)
+			if (strcmp((*cp)->name, stoken) == 0)
+				break;
+	if (*cp == 0)
+		*cp = malloc(sizeof(struct charent));
+	return *cp;
+}
+
 int readtroffmetric(char *fontname, int trindex)
 {
 	char filename[1024];
 	int fd;
 	struct ustr *ustr;
 	int errorflg = 0, line = 1, rv;
-	struct charent **cp;
+	struct charent *cp;
 	char stoken[128];
 	char gname[128];
 	char str[1 << 12];
@@ -196,16 +210,10 @@ int readtroffmetric(char *fontname, int trindex)
 			}
 			if (rv < 0)
 				break;
-			troffontab[trindex].spacewidth = ntoken;
-			for (cp = &(troffontab[trindex].charent[' ']); *cp != 0; cp = &((*cp)->next))
-				if  (strcmp((*cp)->name, " ") == 0)
-					break;
-
-			if (*cp == 0)
-				*cp = malloc(sizeof(struct charent));
-			(*cp)->troffcharwidth = ntoken;
-			(*cp)->next = 0;
-			strcpy((*cp)->name, " ");
+			cp = findglyph_ins(trindex, ' ', " ");
+			cp->troffcharwidth = ntoken;
+			cp->next = 0;
+			strcpy(cp->name, " ");
 		} else if (strcmp(stoken, "special") == 0) {
 			troffontab[trindex].special = TRUE;
 		} else if (strcmp(stoken, "charset") == 0) {
@@ -283,17 +291,12 @@ flush:
 			troffchar = charnum;
 			stoken[0] = '\0';
 		}
-		for (cp = &(troffontab[trindex].charent[troffchar]); *cp != 0; cp = &((*cp)->next)) {
-			if  (strcmp((*cp)->name, stoken) == 0)
-				break;
-		}
-		if (!*cp)
-			*cp = malloc(sizeof(struct charent));
-		(*cp)->charnum = charnum;
-		(*cp)->troffcharwidth = width;
-		(*cp)->next = 0;
-		strcpy((*cp)->name, stoken);
-		strcpy((*cp)->gname, gname);
+		cp = findglyph_ins(trindex, troffchar, stoken);
+		cp->charnum = charnum;
+		cp->troffcharwidth = width;
+		cp->next = 0;
+		strcpy(cp->name, stoken);
+		strcpy(cp->gname, gname);
 	}
 	ustr_free(ustr);
 	return 1;
