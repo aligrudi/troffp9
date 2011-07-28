@@ -198,19 +198,7 @@ foundit:
 					error(FATAL, "character <%s> badly named\n", cp->name);
 				fprintf(fout, "%d build_X%.4x\n", cp->troffcharwidth, r);
 			}
-
-			/* stash charent pointer in a list so that we can print these character definitions
-			 * in the prologue.
-			 */
-			for (i = 0; i < build_char_cnt; i++)
-				if (cp == build_char_list[i])
-					break;
-			if (i == build_char_cnt) {
-				build_char_list = galloc(build_char_list,
-						sizeof(struct charent *) * ++build_char_cnt,
-						"build_char_list");
-				build_char_list[build_char_cnt - 1] = cp;
-			}
+			build_char(cp);
 		}
 		expecthmot = cp->troffcharwidth * fontsize / unitwidth;
 	} else if (isinstring() || rune != ' ') {

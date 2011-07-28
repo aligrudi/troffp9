@@ -40,9 +40,6 @@ struct charent {
 	struct charent *next;
 };
 
-extern struct charent **build_char_list;
-extern int build_char_cnt;
-
 /* these entries map troff character code ranges to
  * postscript font and character ranges.
  */

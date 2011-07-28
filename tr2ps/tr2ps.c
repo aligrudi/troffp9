@@ -9,6 +9,8 @@
 #include "comments.h"
 #include "path.h"
 
+#define MAXBCHARS		512
+
 static int formsperpage = 1;
 static double aspectratio = 1.0;
 static int copies = 1;
@@ -26,8 +28,22 @@ struct ustr *fin;
 static char tmpfilename[MAXTOKENSIZE];
 static char copybuf[BUFSIZ];
 
-struct charent **build_char_list = 0;
-int build_char_cnt = 0;
+static struct charent *build_char_list[MAXBCHARS];
+static int build_char_cnt = 0;
+
+/*
+ * stash charent pointer in a list so that we can
+ * print these character definitions in the prologue.
+ */
+void build_char(struct charent *cp)
+{
+	int i;
+	for (i = 0; i < build_char_cnt; i++)
+		if (cp == build_char_list[i])
+			break;
+	if (i == build_char_cnt)
+		build_char_list[build_char_cnt++] = cp;
+}
 
 void prologues(void)
 {
