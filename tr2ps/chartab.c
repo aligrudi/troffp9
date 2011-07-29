@@ -138,8 +138,10 @@ struct charent *findglyph_ins(int trfid, uc_t rune, char *stoken)
 		if ((*cp)->name)
 			if (strcmp((*cp)->name, stoken) == 0)
 				break;
-	if (*cp == 0)
+	if (*cp == 0) {
 		*cp = malloc(sizeof(struct charent));
+		(*cp)->next = NULL;
+	}
 	return *cp;
 }
 
@@ -212,7 +214,6 @@ int readtroffmetric(char *fontname, int trindex)
 				break;
 			cp = findglyph_ins(trindex, ' ', " ");
 			cp->troffcharwidth = ntoken;
-			cp->next = 0;
 			strcpy(cp->name, " ");
 		} else if (strcmp(stoken, "special") == 0) {
 			troffontab[trindex].special = TRUE;
@@ -294,7 +295,6 @@ flush:
 		cp = findglyph_ins(trindex, troffchar, stoken);
 		cp->charnum = charnum;
 		cp->troffcharwidth = width;
-		cp->next = 0;
 		strcpy(cp->name, stoken);
 		strcpy(cp->gname, gname);
 	}
