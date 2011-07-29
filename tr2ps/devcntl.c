@@ -65,6 +65,7 @@ void devcntl(struct ustr *ustr)
 		ustr_str(ustr, devname, 16);
 		if (debug)
 			fprintf(ferr, "devname=%s\n", devname);
+		readDESC();
 		break;
 
 	case 'E':			/* input encoding - not in troff yet */

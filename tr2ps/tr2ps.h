@@ -1,6 +1,5 @@
 #define MAXSPECHARS 	512
 #define MAXTOKENSIZE	128
-#define CHARLIB		TBASE "/font/devutf/charlib"
 #define UTFmax		3
 
 extern FILE *fout, *ferr;

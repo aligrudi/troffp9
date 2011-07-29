@@ -1,6 +1,7 @@
+#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include "ustr.h"
@@ -103,7 +104,8 @@ void prologues(void)
 	}
 	/* output Build character info from charlib if necessary. */
 	for (i = 0; i < build_char_cnt; i++) {
-		sprintf(charlibname, "%s/%s", CHARLIB, build_char_list[i]->name);
+		sprintf(charlibname, "%s/dev%s/charlib/%s",
+			FONTDIR, devname, build_char_list[i]->name);
 		if (cat(charlibname))
 			fprintf(fout, "cannot open %s\n", charlibname);
 	}
@@ -172,7 +174,6 @@ int main(int argc, char *argv[])
 		}
 		i++;
 	}
-	readDESC();
 	if (i == argc) {
 		fin = ustr_fill(0);
 		if (debug)
