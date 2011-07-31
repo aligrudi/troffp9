@@ -279,7 +279,7 @@ int readtroffmetric(char *fontname, int trindex)
 			while (isspace(*s))
 				s++;
 			e = s;
-			while (*e && !isspace(*s))
+			while (*e && !isspace(*e))
 				e++;
 			*e = '\0';
 			strcpy(gname, s);
