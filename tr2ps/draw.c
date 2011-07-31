@@ -116,7 +116,7 @@ void draw(struct ustr *ustr)
 		hpos += d1;
 		break;
 	case 'e':
-		if (ustr_int(ustr, &d1) <= 0 || ustr_int(ustr, &d2))
+		if (ustr_int(ustr, &d1) <= 0 || ustr_int(ustr, &d2) <= 0)
 			error(FATAL, "draw ellipse function, diameter coordinates not found.\n");
 		endstring();
 		if (pageon())
