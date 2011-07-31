@@ -157,7 +157,7 @@ int ustr_line(struct ustr *us, char *s, int len)
 	while (i < len && us->cur < us->len && us->buf[us->cur] != '\n')
 		s[i++] = us->buf[us->cur++];
 	if (us->cur < us->len)
-		us->cur++;
+		s[i++] = us->buf[us->cur++];
 	s[i] = '\0';
 	return i;
 }
