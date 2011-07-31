@@ -75,11 +75,11 @@ void devcntl(struct ustr *ustr)
 	case 'X':			/* copy through - from troff */
 		if (ustr_str(ustr, str, MAXTOKENSIZE - 1) <= 0)
 			error(FATAL, "incomplete devcntl line\n");
-		if (ustr_line(ustr, buf, sizeof(buf)) <= 0)
+		if (ustr_line(ustr, buf, sizeof(buf)) < 0)
 			error(FATAL, "incomplete devcntl line\n");
 		ustr_back(ustr);
 
-		if (strncmp(str, "PI", sizeof("PI") - 1) == 0 ||
+		if (str[0] == 'P' && str[1] == 'I' ||
 				strncmp(str, "PictureInclusion", strlen("PictureInclusion")) == 0) {
 			picture(ustr, str);
 		} else if (strncmp(str, "InlinePicture", strlen("InlinePicture")) == 0) {
