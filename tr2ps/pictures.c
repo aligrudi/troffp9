@@ -33,11 +33,12 @@
  *
  */
 
-#include <stdio.h>
 #include <fcntl.h>
-#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include "ustr.h"
 #include "ext.h"
 #include "common.h"
@@ -58,7 +59,7 @@ extern int	picflag;
 
 static int tokens(char *s, char **dst, int size, char *delim)
 {
-	int n = 0;
+	int n = 1;
 	dst[0] = s;
 	while (*s && n < size) {
 		while (*s && !strchr(delim, *s))
@@ -66,7 +67,7 @@ static int tokens(char *s, char **dst, int size, char *delim)
 		if (!*s)
 			break;
 		*s = '\0';
-		dst[n++] = s++;
+		dst[n++] = ++s;
 	}
 	return n;
 }
@@ -115,7 +116,8 @@ void picture(struct ustr *ustr, char *buf)
 	double	adjy = 0.5;	/* top-bottom adjustment */
 	double	rot = 0;	/* rotation in clockwise degrees */
 	int	fd_in;		/* for *name */
-	int	i;			/* loop index */
+	struct ustr *pic_ustr;
+	int	i;
 
 
 	if (!picflag)		/* skip it */
@@ -148,6 +150,8 @@ void picture(struct ustr *ustr, char *buf)
 		error(WARNING, "can't open picture file %s\n", name);
 		return;
 	}
+	pic_ustr = ustr_fill(fd_in);
+	close(fd_in);
 
 	frame[0] = frame[1] = -1;		/* default frame height, width */
 	frame[2] = frame[3] = 0;		/* and y and x offsets */
@@ -184,12 +188,13 @@ void picture(struct ustr *ustr, char *buf)
 	fprintf(fout, "cleartomark\n");
 	fprintf(fout, "saveobj restore\n");
 
-	ps_include(ustr, fout, page, whiteout, outline, scaleboth,
+	ps_include(pic_ustr, fout, page, whiteout, outline, scaleboth,
 		frame[3] + frame[1] / 2, -vpos-frame[2] - frame[0] / 2,
 		frame[1], frame[0], adjx, adjy, -rot);
 	/* save(); */
 	fprintf(fout, "/saveobj save def\n");
 	fprintf(fout, "mark\n");
+	ustr_free(pic_ustr);
 }
 
 /*
