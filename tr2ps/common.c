@@ -77,7 +77,8 @@ struct strtab charcode[256] = {
 	{4, "\\374"}, {4, "\\375"}, {4, "\\376"}, {4, "\\377"}
 };
 
-static int in_string = FALSE;
+static int in_string;		/* inside the parenthesis before w command */
+static int in_byname;		/* inside the brackets before g command */
 int char_no = 0;
 int line_no = 0;
 int page_no = 0;		/* page number in a document */
@@ -135,6 +136,8 @@ static int stringhpos, stringvpos;
 
 static void startstring(void)
 {
+	if (in_byname)
+		endstring();
 	if (!in_string) {
 		stringhpos = hpos;
 		stringvpos = vpos;
@@ -144,12 +147,30 @@ static void startstring(void)
 	}
 }
 
+static void startbyname(void)
+{
+	if (in_string)
+		endstring();
+	if (!in_byname) {
+		stringhpos = hpos;
+		stringvpos = vpos;
+		if (pageon())
+			fprintf(fout, "[");
+		in_byname = 1;
+	}
+}
+
 void endstring(void)
 {
 	if (in_string) {
 		if (pageon())
 			fprintf(fout, ") %d %d w\n", stringhpos, stringvpos);
 		in_string = 0;
+	}
+	if (in_byname) {
+		if (pageon())
+			fprintf(fout, "] %d %d g\n", stringhpos, stringvpos);
+		in_byname = 0;
 	}
 }
 
@@ -167,9 +188,9 @@ void showglyph(char *s)
 
 void showglyph_byname(char *s)
 {
-	if (in_string)
-		endstring();
-	fprintf(fout, "/%s %d %d g\n", s, hpos, vpos);
+	if (!in_byname)
+		startbyname();
+	fprintf(fout, "/%s", s);
 }
 
 void startpage(void)

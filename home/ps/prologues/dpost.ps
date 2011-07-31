@@ -122,7 +122,7 @@
 
 /w {neg moveto show} bind def
 /m {neg dup /y exch def moveto} bind def
-/g {neg moveto glyphshow} bind def
+/g {neg moveto {glyphshow} forall} bind def
 /done {/lastpage where {pop lastpage} if} def
 
 /f {
