@@ -774,10 +774,8 @@ SpecialCharset() {
 		(LA)	(110	1	1)	% charlib
 		(LV)	(110	3	1)	% charlib
 		(LH)	(210	1	1)	% charlib
-		(lh)	(100	0	1)	% charlib
 		(rh)	(100	0	1)	% charlib
-		(lH)	(100	0	1)	% charlib
-		(rH)	(100	0	1)	% charlib
+		(lh)	(100	0	1)	% charlib
 		(PC)	(220	2	1)	% charlib
 		(DG)	(185	2	1)	% charlib
 	//End of SpecialCharset
