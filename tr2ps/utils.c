@@ -76,7 +76,8 @@ struct charent *findglyph(int trfid, uc_t rune, char *stoken)
 	return cp;
 }
 
-/* output glyph.  Use first rune to look up character (hash)
+/*
+ * Output glyph.  Use first rune to look up character (hash)
  * then use stoken UTF string to find correct glyph in linked
  * list of glyphs in bucket.
  */
@@ -100,18 +101,14 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 		if (expecthmot)
 			hmot(0);
 
+		if (!*troffontab[fontid].trfontid)
+			error(WARNING, "glyphout:troffontab[%d].trfontid=0x%x, botch!\n",
+				fontid, troffontab[fontid].trfontid);
 		/* check special fonts for the special character */
 		/* cycle through the (troff) mounted fonts starting at the next font */
 		for (mi = 0; mi < fontmnt; mi++) {
-			if (!*troffontab[fontid].trfontid)
-				error(WARNING, "glyphout:troffontab[%d].trfontid=0x%x, botch!\n",
-					fontid, troffontab[fontid].trfontid);
-			if (!*fontmtab[mi]) {
-				if (debug)
-					fprintf(ferr, "fontmtab[%d]=0x%p, fontmnt=%d\n",
-						mi, fontmtab[mi], fontmnt);
+			if (!*fontmtab[mi])
 				continue;
-			}
 			if (strcmp(troffontab[fontid].trfontid, fontmtab[mi]) == 0)
 				break;
 		}
@@ -132,9 +129,6 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 		/* check font 1 (if current font is not font 1) for the special character */
 		if (mi != 1) {
 			fontid = findtfn(fontmtab[1], TRUE);
-			if (debug)
-				fprintf(ferr, "\tlooking through font at position 1: trying %s\n",
-					troffontab[fontid].trfontid);
 			cp = findglyph(fontid, rune, stoken);
 			if (cp)
 				goto foundit;
@@ -142,8 +136,8 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 	}
 
 	if (!cp) {
-		error(WARNING, "cannot find glyph, rune=0x%x stoken=<%s> troff font %s\n", rune, stoken,
-			troffontab[curtrofffontid].trfontid);
+		error(WARNING, "cannot find glyph, rune=0x%x stoken=<%s> troff font %s\n",
+			rune, stoken, troffontab[curtrofffontid].trfontid);
 		expecthmot = 0;
 	}
 
@@ -151,16 +145,9 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 	rune = 'p';
 	stoken = "pw";
 	for (i = (mi + 1) % fontmnt; i != mi; i = (i + 1) % fontmnt) {
-		if (!*fontmtab[i]) {
-			if (debug)
-				fprintf(ferr, "fontmtab[%d]=0x%p\n",
-					i, fontmtab[i]);
+		if (!*fontmtab[i])
 			continue;
-		}
 		fontid = findtfn(fontmtab[i], TRUE);
-		if (debug)
-			fprintf(ferr, "\tlooking through special fonts: trying %s\n",
-				troffontab[fontid].trfontid);
 		if (troffontab[fontid].special) {
 			cp = findglyph(fontid, rune, stoken);
 			if (cp)
@@ -209,12 +196,12 @@ foundit:
 	}
 }
 
-/* runeout puts a symbol into a string (queue) to be output.
+/*
+ * runeout puts a symbol into a string (queue) to be output.
  * It also has to keep track of the current and last symbol
  * output to check that the spacing is correct by default
  * or needs to be adjusted with a spacing operation.
  */
-
 void runeout(uc_t rune)
 {
 	char stoken[UTFmax + 1];
