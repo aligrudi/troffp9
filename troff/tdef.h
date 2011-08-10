@@ -12,7 +12,7 @@
 #define TMACDIR		TBASE "/tmac/tmac."
 #define FONTDIR		TBASE "/font"
 #define NTERMDIR	TBASE "/term/tab."
-#define TEXHYPHENS	TBASE "hyphen/hyphen.tex"
+#define TEXHYPHENS	TBASE "/hyphen/hyphen.tex"
 
 #define TDEVNAME	"utf"
 #define NDEVNAME	"utf"
