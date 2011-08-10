@@ -1,7 +1,7 @@
 include ../conf.mk
 
-CFLAGS = -O2 -Wall -D'PROGRAMVERSION="0.1"' -D'DOROUND=1' \
-	-D'PROGRAMNAME="troff"' -DTBASE=\"$(TBASE)\"
+CFLAGS = -O2 -Wall -DPROGRAMVERSION=\"0.1\" -DDOROUND=1 \
+	-DPROGRAMNAME=\"troff\" -DTBASE=\"$(TBASE)\"
 LDFLAGS = -lm
 
 all: tr2ps

@@ -9,22 +9,14 @@
 
 /* Site dependent definitions */
 
-#ifndef TMACDIR
-#define TMACDIR		"lib/tmac/tmac."
-#endif
-#ifndef FONTDIR
-#define FONTDIR		"lib/font"
-#endif
-#ifndef NTERMDIR
-#define NTERMDIR	"lib/term/tab."
-#endif
-#ifndef TEXHYPHENS
-#define	TEXHYPHENS	"/usr/lib/tex/macros/hyphen.tex"
-#endif
+#define TMACDIR		TBASE "/tmac/tmac."
+#define FONTDIR		TBASE "/font"
+#define NTERMDIR	TBASE "/term/tab."
+#define TEXHYPHENS	TBASE "hyphen/hyphen.tex"
 
 #define TDEVNAME	"utf"
 #define NDEVNAME	"utf"
-#define	ALTHYPHENS	TEXHYPHENS	/* another place to look */
+#define ALTHYPHENS	TEXHYPHENS	/* another place to look */
 
 typedef	unsigned char	Uchar;
 typedef unsigned short	Ushort;
