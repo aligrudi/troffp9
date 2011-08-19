@@ -82,6 +82,7 @@ void setpsfont(int, int);
 void settrfont(void);
 int hash(char *, int);
 int readDESC(void);
+void setencoding(char *name);
 void finish(void);
 void ps_include(struct ustr *us, FILE *out, int, int,
 	int, int, double, double, double, double,

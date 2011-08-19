@@ -93,7 +93,6 @@ void prologues(void)
 		fprintf(fout, "/xoffset %g def\n", xoffset);
 	if (yoffset != .25)
 		fprintf(fout, "/yoffset %g def\n", yoffset);
-	cat(ENCODINGDIR"/Latin1.enc");
 	if (passthrough != 0)
 		fprintf(fout, "%s\n", passthrough);
 

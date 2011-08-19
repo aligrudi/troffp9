@@ -110,32 +110,56 @@
 	dup 255 gt {pop}{exch pop} ifelse
 } def
 
+% create a font with the given encoding array
+/TMPFont {
+	dup length dict begin
+		{ 1 index /FID ne {def} {pop pop} ifelse } forall
+		/Encoding exch def
+		currentdict
+	end
+	/tmp-font exch definefont
+} bind def
+
+% Given an array, charset, containing troff char names (even entries) and
+% PS font names (odd entries), we generate troff font tables in three steps:
+%
+% 1. generate chcodes array that contains the mapping of input character
+%    in current font encoding (256 for characters not in encoding array)
+% 2. generate a temporary encoding array for charset (for finding the
+%    width of characters)
+% 3. create a temporary font with this new encoding array
+% 4. print troff table columns for each character in charset
 /BuildFontCharset {
+	% create the charcode array
+	/chcodes charset length 2 idiv array def
 	0 2 charset length 2 sub {
 		/i exch def
-		/chcode -1 def
-		/chname null def
 		/key charset i get def
 		/val charset i 1 add get def
-
-		val type /integertype eq {
-			/chcode val def
-			/chname currentfontdict /Encoding get chcode get def
+		/chcode currentfontdict /Encoding get val GetCode def
+		chcodes i 2 idiv chcode put
+	} for
+	% create a temporary array for charset
+	/tmpenc charset length array def
+	0 2 charset length 2 sub {
+		/i exch def
+		/val charset i 1 add get def
+		val type /stringtype eq not {
+			tmpenc i 2 idiv val put
 		} if
+	} for
 
-		val type /nametype eq {
-			/chname val def
-			/chcode currentfontdict /Encoding get chname GetCode def
-		} if
+	% use the new font
+	/currentfontdict tmpenc currentfontdict TMPFont def
+	currentfontdict setfont
 
-		val type /stringtype eq {/chcode 0 def} if
-
-		chcode 0 lt chcode 255 gt or {
-			chcode 0 lt {(syntaxerror: )}{(undefinedname: )} ifelse
-			Print key Print (\t) Print val Print (\n) Print
-			quit
-		} if
-
+	% print troff table
+	0 2 charset length 2 sub {
+		/i exch def
+		/key charset i get def
+		/val charset i 1 add get def
+		/curcode i 2 idiv def		% tmpenc chcode
+		/chcode chcodes curcode get def	% original chcode
 		val type /stringtype eq {
 			key Print
 			(\t) Print val Print
@@ -144,22 +168,16 @@
 			chcode octalescapes ge key (---) eq and {
 				(\\0) Print chcode 8 (   ) cvrs Print
 			}{key Print} ifelse
-			(\t) Print chcode GetWidth Print
-			(\t) Print chcode GetAscender Print
+			(\t) Print curcode GetWidth Print
+			(\t) Print curcode GetAscender Print
 			(\t) Print chcode Print
 			chcode startcomments ge {
-				(\t) Print chname Print
+				(\t) Print val Print
 			} if
 			(\n) Print
-			%chcode octalescapes ge (---) key ne and {
-			%	key (\\0) anchorsearch not {
-			%		pop
-			%		(\\0) Print chcode 8 (   ) cvrs Print
-			%		(\t"\n) Print
-			%	}{pop pop} ifelse
-			%} if
 		} ifelse
 	} for
+
 } def
 
 /BuildDescCharset {

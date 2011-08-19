@@ -74,6 +74,7 @@ int readDESC(void)
 			break;	
 		case 1:
 			strcpy(encoding, token);
+			setencoding(encoding);
 			if (debug)
 				fprintf(ferr, "encoding %s\n", token);
 			break;
