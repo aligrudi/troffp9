@@ -3,7 +3,7 @@ TROFF TOOLS
 
 This is the port of Plan9 troff tools to Linux which probably works
 in other Unix variants with minor modifications.  The included
-programs are troff, tr2ps (dpost), eqn, tbl, and pic.
+programs are troff, tr2ps (dpost), eqn, tbl, pic, and grap.
 
 SETTING UP
 ==========
@@ -11,7 +11,7 @@ SETTING UP
 Change TBASE variable conf.mk to point the home folder in this
 package.  Then compile everything:
 
-  $ for t in troff tr2ps eqn tbl pic; do cd $t; make; cd ..; done
+  $ for t in troff tr2ps eqn tbl pic grap; do cd $t; make; cd ..; done
 
 Next, you may want to copy the binaries to a directory in your $PATH.
 
