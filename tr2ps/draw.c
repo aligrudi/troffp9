@@ -252,9 +252,8 @@ void drawpath(char *buf, int copy)
  * a mistake. Suspect I may have to change the double quote delimiters.
  *
  */
-static void parsebuf(char *buf)
+static void parsebuf(char *p)
 {
-	char *p;			/* usually the next token */
 	char *q;
 	int gsavelevel = 0;		/* non-zero if we've done a gsave */
 
