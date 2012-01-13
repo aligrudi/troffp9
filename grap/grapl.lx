@@ -9,8 +9,6 @@
 #include "grap.h"
 #include "y.tab.h"
 
-extern	struct	symtab	symtab[];
-
 int	yyback(int *, int);
 int	yylook(void);
 int	yywrap(void);
@@ -199,15 +197,15 @@ WS	[ \t]
 
 <A>\"		{ BEGIN str; clen = 0; }
 
-<A>#.*		;
-
-<A>.		{ yylval.i = yytext[0]; return(yytext[0]); }
-
 <str>\"		{ BEGIN A; cbuf[clen] = 0;
 		  yylval.p = tostring(cbuf); return(STRING); }
 <str>\n		{ ERROR "newline in string" WARNING; BEGIN A; return(ST); }
 <str>"\\\""	{ cbuf[clen++] = '\\'; cbuf[clen++] = '"'; }
 <str>"\\\\"	{ cbuf[clen++] = '\\'; cbuf[clen++] = '\\'; }
 <str>.		{ CADD; }
+
+<A>#.*		;
+
+<A>.		{ yylval.i = yytext[0]; return(yytext[0]); }
 
 %%

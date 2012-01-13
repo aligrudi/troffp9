@@ -1,5 +1,3 @@
-
-#line	2	"#Z/tmp/grap/grap.y"
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -743,464 +741,312 @@ yyerrlab:
 	switch(yym) {
 		
 case 1:
-#line	54	"#Z/tmp/grap/grap.y"
 { if (codegen && !synerr) graph((char *) 0); } break;
 case 2:
-#line	55	"#Z/tmp/grap/grap.y"
 { codegen = 0; } break;
 case 3:
-#line	56	"#Z/tmp/grap/grap.y"
 { codegen = 0; ERROR "syntax error" WARNING; } break;
 case 7:
-#line	65	"#Z/tmp/grap/grap.y"
 { graph(yypt[-0].yyv.p); endstat(); } break;
 case 9:
-#line	70	"#Z/tmp/grap/grap.y"
 { endstat(); } break;
 case 10:
-#line	71	"#Z/tmp/grap/grap.y"
 { endstat(); } break;
 case 11:
-#line	75	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 12:
-#line	76	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 13:
-#line	77	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 14:
-#line	78	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 16:
-#line	80	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 17:
-#line	81	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 18:
-#line	82	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 20:
-#line	84	"#Z/tmp/grap/grap.y"
 { codegen = 1; } break;
 case 21:
-#line	85	"#Z/tmp/grap/grap.y"
 { codegen = 1; pic(yypt[-0].yyv.p); } break;
 case 25:
-#line	89	"#Z/tmp/grap/grap.y"
 { codegen = 1; numlist(); } break;
 case 27:
-#line	91	"#Z/tmp/grap/grap.y"
 { fprintf(stderr, "\t%g\n", yypt[-0].yyv.f); } break;
 case 28:
-#line	92	"#Z/tmp/grap/grap.y"
 { fprintf(stderr, "\t%s\n", yypt[-0].yyv.ap->sval); freeattr(yypt[-0].yyv.ap); } break;
 case 30:
-#line	97	"#Z/tmp/grap/grap.y"
 { savenum(0, yypt[-0].yyv.f); yyval.i = 1; } break;
 case 31:
-#line	98	"#Z/tmp/grap/grap.y"
 { savenum(yypt[-1].yyv.i, yypt[-0].yyv.f); yyval.i = yypt[-1].yyv.i+1; } break;
 case 32:
-#line	99	"#Z/tmp/grap/grap.y"
 { savenum(yypt[-2].yyv.i, yypt[-0].yyv.f); yyval.i = yypt[-2].yyv.i+1; } break;
 case 34:
-#line	103	"#Z/tmp/grap/grap.y"
 { yyval.f = -yypt[-0].yyv.f; } break;
 case 35:
-#line	104	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-0].yyv.f; } break;
 case 36:
-#line	108	"#Z/tmp/grap/grap.y"
 { label(yypt[-2].yyv.i, yypt[-1].yyv.ap); } break;
 case 40:
-#line	116	"#Z/tmp/grap/grap.y"
 { labelmove(yypt[-1].yyv.i, yypt[-0].yyv.f); } break;
 case 41:
-#line	117	"#Z/tmp/grap/grap.y"
 { labelmove(yypt[-1].yyv.i, yypt[-0].yyv.f); } break;
 case 42:
-#line	118	"#Z/tmp/grap/grap.y"
 { labelmove(yypt[-1].yyv.i, yypt[-0].yyv.f); /* LEFT or RIGHT only */ } break;
 case 43:
-#line	119	"#Z/tmp/grap/grap.y"
 { labelwid(yypt[-0].yyv.f); } break;
 case 45:
-#line	124	"#Z/tmp/grap/grap.y"
 { yyval.i = 0; } break;
 case 46:
-#line	127	"#Z/tmp/grap/grap.y"
 { frameht(yypt[-0].yyv.f); } break;
 case 47:
-#line	128	"#Z/tmp/grap/grap.y"
 { framewid(yypt[-0].yyv.f); } break;
 case 48:
-#line	129	"#Z/tmp/grap/grap.y"
 { frameside(yypt[-1].yyv.i, yypt[-0].yyv.ap); } break;
 case 49:
-#line	130	"#Z/tmp/grap/grap.y"
 { frameside(0, yypt[-0].yyv.ap); } break;
 case 52:
-#line	137	"#Z/tmp/grap/grap.y"
 { yyval.i = 0; } break;
 case 53:
-#line	141	"#Z/tmp/grap/grap.y"
 { yyval.ap = makeattr(yypt[-1].yyv.i, yypt[-0].yyv.f, (char *) 0, 0, 0); } break;
 case 59:
-#line	148	"#Z/tmp/grap/grap.y"
 { yyval.ap = makeattr(0, 0.0, (char *) 0, 0, 0); } break;
 case 60:
-#line	152	"#Z/tmp/grap/grap.y"
 { ticks(); } break;
 case 63:
-#line	159	"#Z/tmp/grap/grap.y"
 { tickside(yypt[-0].yyv.i); } break;
 case 64:
-#line	160	"#Z/tmp/grap/grap.y"
 { tickdir(IN, yypt[-0].yyv.f, 1); } break;
 case 65:
-#line	161	"#Z/tmp/grap/grap.y"
 { tickdir(OUT, yypt[-0].yyv.f, 1); } break;
 case 66:
-#line	162	"#Z/tmp/grap/grap.y"
 { tickdir(IN, 0.0, 0); } break;
 case 67:
-#line	163	"#Z/tmp/grap/grap.y"
 { tickdir(OUT, 0.0, 0); } break;
 case 68:
-#line	164	"#Z/tmp/grap/grap.y"
 { setlist(); ticklist(yypt[-1].yyv.op, AT); } break;
 case 69:
-#line	165	"#Z/tmp/grap/grap.y"
 { setlist(); ticklist(yypt[-0].yyv.op, AT); } break;
 case 70:
-#line	166	"#Z/tmp/grap/grap.y"
 { tickoff(yypt[-1].yyv.i); } break;
 case 71:
-#line	167	"#Z/tmp/grap/grap.y"
 { tickoff(LEFT|RIGHT|TOP|BOT); } break;
 case 75:
-#line	175	"#Z/tmp/grap/grap.y"
 { savetick(yypt[-0].yyv.f, (char *) 0); } break;
 case 76:
-#line	176	"#Z/tmp/grap/grap.y"
 { savetick(yypt[-1].yyv.f, yypt[-0].yyv.ap->sval); } break;
 case 77:
-#line	180	"#Z/tmp/grap/grap.y"
 { iterator(yypt[-7].yyv.f, yypt[-4].yyv.f, yypt[-2].yyv.i, yypt[-1].yyv.f, yypt[-0].yyv.p); yyval.op = yypt[-8].yyv.op; } break;
 case 78:
-#line	182	"#Z/tmp/grap/grap.y"
 { iterator(yypt[-4].yyv.f, yypt[-1].yyv.f, '+', 1.0, yypt[-0].yyv.p); yyval.op = yypt[-5].yyv.op; } break;
 case 79:
-#line	185	"#Z/tmp/grap/grap.y"
 { yyval.i = '+'; } break;
 case 80:
-#line	186	"#Z/tmp/grap/grap.y"
 { yyval.i = '-'; } break;
 case 81:
-#line	187	"#Z/tmp/grap/grap.y"
 { yyval.i = '*'; } break;
 case 82:
-#line	188	"#Z/tmp/grap/grap.y"
 { yyval.i = '/'; } break;
 case 83:
-#line	189	"#Z/tmp/grap/grap.y"
 { yyval.i = ' '; } break;
 case 84:
-#line	192	"#Z/tmp/grap/grap.y"
 { yyval.p = yypt[-0].yyv.ap->sval; } break;
 case 85:
-#line	193	"#Z/tmp/grap/grap.y"
 { yyval.p = (char *) 0; } break;
 case 86:
-#line	197	"#Z/tmp/grap/grap.y"
 { ticks(); } break;
 case 89:
-#line	204	"#Z/tmp/grap/grap.y"
 { tickside(yypt[-0].yyv.i); } break;
 case 90:
-#line	205	"#Z/tmp/grap/grap.y"
 { tickside(BOT); } break;
 case 91:
-#line	206	"#Z/tmp/grap/grap.y"
 { tickside(LEFT); } break;
 case 92:
-#line	207	"#Z/tmp/grap/grap.y"
 { griddesc(yypt[-0].yyv.ap); } break;
 case 93:
-#line	208	"#Z/tmp/grap/grap.y"
 { setlist(); gridlist(yypt[-1].yyv.op); } break;
 case 94:
-#line	209	"#Z/tmp/grap/grap.y"
 { setlist(); gridlist(yypt[-0].yyv.op); } break;
 case 95:
-#line	210	"#Z/tmp/grap/grap.y"
 { gridtickoff(); } break;
 case 96:
-#line	211	"#Z/tmp/grap/grap.y"
 { gridtickoff(); } break;
 case 98:
-#line	216	"#Z/tmp/grap/grap.y"
 { line(yypt[-5].yyv.i, yypt[-3].yyv.pt, yypt[-1].yyv.pt, yypt[-0].yyv.ap); } break;
 case 99:
-#line	217	"#Z/tmp/grap/grap.y"
 { line(yypt[-5].yyv.i, yypt[-2].yyv.pt, yypt[-0].yyv.pt, yypt[-4].yyv.ap); } break;
 case 100:
-#line	220	"#Z/tmp/grap/grap.y"
 { circle(yypt[-2].yyv.f, yypt[-0].yyv.pt); } break;
 case 101:
-#line	221	"#Z/tmp/grap/grap.y"
 { circle(yypt[-0].yyv.f, yypt[-2].yyv.pt); } break;
 case 102:
-#line	222	"#Z/tmp/grap/grap.y"
 { circle(0.0, yypt[-0].yyv.pt); } break;
 case 104:
-#line	227	"#Z/tmp/grap/grap.y"
 { yyval.ap = addattr(yypt[-1].yyv.ap, yypt[-0].yyv.ap); } break;
 case 105:
-#line	230	"#Z/tmp/grap/grap.y"
 { yyval.ap = makesattr(yypt[-1].yyv.p); } break;
 case 106:
-#line	232	"#Z/tmp/grap/grap.y"
 { yyval.ap = makesattr(sprntf(yypt[-2].yyv.p, (Attr*) 0)); } break;
 case 107:
-#line	234	"#Z/tmp/grap/grap.y"
 { yyval.ap = makesattr(sprntf(yypt[-4].yyv.p, yypt[-2].yyv.ap)); } break;
 case 108:
-#line	237	"#Z/tmp/grap/grap.y"
 { yyval.ap = makefattr(NUMBER, yypt[-0].yyv.f); } break;
 case 109:
-#line	238	"#Z/tmp/grap/grap.y"
 { yyval.ap = addattr(yypt[-2].yyv.ap, makefattr(NUMBER, yypt[-0].yyv.f)); } break;
 case 112:
-#line	243	"#Z/tmp/grap/grap.y"
 { yyval.ap = (Attr *) 0; } break;
 case 113:
-#line	246	"#Z/tmp/grap/grap.y"
 { setjust(yypt[-0].yyv.i); } break;
 case 114:
-#line	247	"#Z/tmp/grap/grap.y"
 { setsize(yypt[-1].yyv.i, yypt[-0].yyv.f); } break;
 case 115:
-#line	251	"#Z/tmp/grap/grap.y"
 { coord(yypt[-1].yyv.op); } break;
 case 116:
-#line	252	"#Z/tmp/grap/grap.y"
 { resetcoord(yypt[-0].yyv.op); } break;
 case 119:
-#line	259	"#Z/tmp/grap/grap.y"
 { coordlog(yypt[-0].yyv.i); } break;
 case 120:
-#line	260	"#Z/tmp/grap/grap.y"
 { coord_x(yypt[-0].yyv.pt); } break;
 case 121:
-#line	261	"#Z/tmp/grap/grap.y"
 { coord_y(yypt[-0].yyv.pt); } break;
 case 122:
-#line	262	"#Z/tmp/grap/grap.y"
 { coord_x(makepoint(yypt[-3].yyv.op, yypt[-2].yyv.f, yypt[-0].yyv.f)); } break;
 case 123:
-#line	263	"#Z/tmp/grap/grap.y"
 { coord_y(makepoint(yypt[-3].yyv.op, yypt[-2].yyv.f, yypt[-0].yyv.f)); } break;
 case 124:
-#line	264	"#Z/tmp/grap/grap.y"
 { coord_x(makepoint(yypt[-3].yyv.op, yypt[-2].yyv.f, yypt[-0].yyv.f)); } break;
 case 125:
-#line	265	"#Z/tmp/grap/grap.y"
 { coord_y(makepoint(yypt[-3].yyv.op, yypt[-2].yyv.f, yypt[-0].yyv.f)); } break;
 case 126:
-#line	268	"#Z/tmp/grap/grap.y"
 { yyval.i = XFLAG; } break;
 case 127:
-#line	269	"#Z/tmp/grap/grap.y"
 { yyval.i = YFLAG; } break;
 case 128:
-#line	270	"#Z/tmp/grap/grap.y"
 { yyval.i = XFLAG|YFLAG; } break;
 case 129:
-#line	271	"#Z/tmp/grap/grap.y"
 { yyval.i = XFLAG|YFLAG; } break;
 case 130:
-#line	272	"#Z/tmp/grap/grap.y"
 { yyval.i = XFLAG|YFLAG; } break;
 case 131:
-#line	276	"#Z/tmp/grap/grap.y"
 { plot(yypt[-2].yyv.ap, yypt[-0].yyv.pt); } break;
 case 132:
-#line	277	"#Z/tmp/grap/grap.y"
 { plot(yypt[-2].yyv.ap, yypt[-0].yyv.pt); } break;
 case 133:
-#line	278	"#Z/tmp/grap/grap.y"
 { plotnum(yypt[-3].yyv.f, yypt[-2].yyv.p, yypt[-0].yyv.pt); } break;
 case 134:
-#line	282	"#Z/tmp/grap/grap.y"
 { drawdesc(yypt[-2].yyv.i, yypt[-1].yyv.op, yypt[-0].yyv.ap, (char *) 0); } break;
 case 135:
-#line	283	"#Z/tmp/grap/grap.y"
 { drawdesc(yypt[-3].yyv.i, yypt[-2].yyv.op, yypt[-1].yyv.ap, yypt[-0].yyv.ap->sval); } break;
 case 136:
-#line	284	"#Z/tmp/grap/grap.y"
 { drawdesc(yypt[-3].yyv.i, yypt[-2].yyv.op, yypt[-0].yyv.ap, yypt[-1].yyv.ap->sval); } break;
 case 139:
-#line	292	"#Z/tmp/grap/grap.y"
 { next(yypt[-3].yyv.op, yypt[-1].yyv.pt, yypt[-0].yyv.ap); } break;
 case 140:
-#line	295	"#Z/tmp/grap/grap.y"
 { copy(); } break;
 case 143:
-#line	302	"#Z/tmp/grap/grap.y"
 { copyfile(yypt[-0].yyv.ap->sval); } break;
 case 144:
-#line	303	"#Z/tmp/grap/grap.y"
 { copydef(yypt[-0].yyv.op); } break;
 case 145:
-#line	304	"#Z/tmp/grap/grap.y"
 { copyuntil(yypt[-0].yyv.ap->sval); } break;
 case 146:
-#line	309	"#Z/tmp/grap/grap.y"
 { forloop(yypt[-8].yyv.op, yypt[-6].yyv.f, yypt[-4].yyv.f, yypt[-2].yyv.i, yypt[-1].yyv.f, yypt[-0].yyv.p); } break;
 case 147:
-#line	311	"#Z/tmp/grap/grap.y"
 { forloop(yypt[-5].yyv.op, yypt[-3].yyv.f, yypt[-1].yyv.f, '+', 1.0, yypt[-0].yyv.p); } break;
 case 148:
-#line	313	"#Z/tmp/grap/grap.y"
 { forloop(yypt[-8].yyv.op, yypt[-6].yyv.f, yypt[-4].yyv.f, yypt[-2].yyv.i, yypt[-1].yyv.f, yypt[-0].yyv.p); } break;
 case 149:
-#line	315	"#Z/tmp/grap/grap.y"
 { forloop(yypt[-5].yyv.op, yypt[-3].yyv.f, yypt[-1].yyv.f, '+', 1.0, yypt[-0].yyv.p); } break;
 case 150:
-#line	319	"#Z/tmp/grap/grap.y"
 { yyval.p = ifstat(yypt[-2].yyv.f, yypt[-1].yyv.p, yypt[-0].yyv.p); } break;
 case 151:
-#line	320	"#Z/tmp/grap/grap.y"
 { yyval.p = ifstat(yypt[-1].yyv.f, yypt[-0].yyv.p, (char *) 0); } break;
 case 154:
-#line	325	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f && yypt[-0].yyv.f; } break;
 case 155:
-#line	326	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f || yypt[-0].yyv.f; } break;
 case 156:
-#line	329	"#Z/tmp/grap/grap.y"
 { yyval.f = strcmp(yypt[-2].yyv.p,yypt[-0].yyv.p) == 0; free(yypt[-2].yyv.p); free(yypt[-0].yyv.p); } break;
 case 157:
-#line	330	"#Z/tmp/grap/grap.y"
 { yyval.f = strcmp(yypt[-2].yyv.p,yypt[-0].yyv.p) != 0; free(yypt[-2].yyv.p); free(yypt[-0].yyv.p); } break;
 case 158:
-#line	334	"#Z/tmp/grap/grap.y"
 { yyval.pt = makepoint(yypt[-3].yyv.op, yypt[-2].yyv.f, yypt[-0].yyv.f); } break;
 case 159:
-#line	335	"#Z/tmp/grap/grap.y"
 { yyval.pt = makepoint(yypt[-5].yyv.op, yypt[-3].yyv.f, yypt[-1].yyv.f); } break;
 case 160:
-#line	338	"#Z/tmp/grap/grap.y"
 { yyval.i = ','; } break;
 case 161:
-#line	342	"#Z/tmp/grap/grap.y"
 { yyval.op = yypt[-0].yyv.op; } break;
 case 162:
-#line	343	"#Z/tmp/grap/grap.y"
 { yyval.op = lookup(curr_coord, 1); } break;
 case 165:
-#line	349	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-1].yyv.f; } break;
 case 166:
-#line	350	"#Z/tmp/grap/grap.y"
 { yyval.f = getvar(yypt[-0].yyv.op); } break;
 case 167:
-#line	351	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f + yypt[-0].yyv.f; } break;
 case 168:
-#line	352	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f - yypt[-0].yyv.f; } break;
 case 169:
-#line	353	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f * yypt[-0].yyv.f; } break;
 case 170:
-#line	354	"#Z/tmp/grap/grap.y"
 { if (yypt[-0].yyv.f == 0.0) {
 					ERROR "division by 0" WARNING; yypt[-0].yyv.f = 1; }
 				  yyval.f = yypt[-2].yyv.f / yypt[-0].yyv.f; } break;
 case 171:
-#line	357	"#Z/tmp/grap/grap.y"
 { if ((long)yypt[-0].yyv.f == 0) {
 					ERROR "mod division by 0" WARNING; yypt[-0].yyv.f = 1; }
 				  yyval.f = (long)yypt[-2].yyv.f % (long)yypt[-0].yyv.f; } break;
 case 172:
-#line	360	"#Z/tmp/grap/grap.y"
 { yyval.f = -yypt[-0].yyv.f; } break;
 case 173:
-#line	361	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-0].yyv.f; } break;
 case 174:
-#line	362	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-1].yyv.f; } break;
 case 175:
-#line	363	"#Z/tmp/grap/grap.y"
 { yyval.f = Log10(yypt[-1].yyv.f); } break;
 case 176:
-#line	364	"#Z/tmp/grap/grap.y"
 { yyval.f = Exp(yypt[-1].yyv.f * log(10.0)); } break;
 case 177:
-#line	365	"#Z/tmp/grap/grap.y"
 { yyval.f = pow(yypt[-2].yyv.f, yypt[-0].yyv.f); } break;
 case 178:
-#line	366	"#Z/tmp/grap/grap.y"
 { yyval.f = sin(yypt[-1].yyv.f); } break;
 case 179:
-#line	367	"#Z/tmp/grap/grap.y"
 { yyval.f = cos(yypt[-1].yyv.f); } break;
 case 180:
-#line	368	"#Z/tmp/grap/grap.y"
 { yyval.f = atan2(yypt[-3].yyv.f, yypt[-1].yyv.f); } break;
 case 181:
-#line	369	"#Z/tmp/grap/grap.y"
 { yyval.f = Sqrt(yypt[-1].yyv.f); } break;
 case 182:
-#line	370	"#Z/tmp/grap/grap.y"
 { yyval.f = (double)rand() / (double)RAND_MAX; } break;
 case 183:
-#line	371	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-3].yyv.f >= yypt[-1].yyv.f ? yypt[-3].yyv.f : yypt[-1].yyv.f; } break;
 case 184:
-#line	372	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-3].yyv.f <= yypt[-1].yyv.f ? yypt[-3].yyv.f : yypt[-1].yyv.f; } break;
 case 185:
-#line	373	"#Z/tmp/grap/grap.y"
 { yyval.f = (long) yypt[-1].yyv.f; } break;
 case 186:
-#line	374	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f > yypt[-0].yyv.f; } break;
 case 187:
-#line	375	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f < yypt[-0].yyv.f; } break;
 case 188:
-#line	376	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f <= yypt[-0].yyv.f; } break;
 case 189:
-#line	377	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f >= yypt[-0].yyv.f; } break;
 case 190:
-#line	378	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f == yypt[-0].yyv.f; } break;
 case 191:
-#line	379	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f != yypt[-0].yyv.f; } break;
 case 192:
-#line	380	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f && yypt[-0].yyv.f; } break;
 case 193:
-#line	381	"#Z/tmp/grap/grap.y"
 { yyval.f = yypt[-2].yyv.f || yypt[-0].yyv.f; } break;
 case 194:
-#line	382	"#Z/tmp/grap/grap.y"
 { yyval.f = !(yypt[-0].yyv.f); } break;
 case 195:
-#line	385	"#Z/tmp/grap/grap.y"
 { yyval.f = setvar(yypt[-2].yyv.op, yypt[-0].yyv.f); } break;
 case 199:
-#line	395	"#Z/tmp/grap/grap.y"
 { yyval.f = 0.0; } break;
 	}
 	goto yystack;  /* stack new state and value */

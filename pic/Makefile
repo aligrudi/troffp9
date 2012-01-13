@@ -9,7 +9,5 @@ pic: picy.o picl.o main.o print.o misc.o symtab.o blockgen.o \
 		textgen.o input.o for.o pltroff.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-#picl.c:	picl.lx
-#	$(LEX) -t $< >$@
 clean:
 	rm -f *.o pic
