@@ -141,26 +141,30 @@ static void ref_insert(int fd)
 	xwrite(fd, list, s - list);
 }
 
+static void cut(char *d, char *s, char *jump, char *stop)
+{
+	while (strchr(jump, *s))
+		s++;
+	while (*s && !strchr(stop, *s))
+		*d++ = *s++;
+	*d = '\0';
+}
+
 static void seen_ref(int fd, char *b, char *e)
 {
 	char msg[128];
 	char label[128];
-	char *s, *r;
 	int id;
-	s = strchr(b, '\n') + 1;
-	while (isspace(*s))
-		s++;
-	r = label;
-	while (*s && !isspace(*s))
-		*r++ = *s++;
-	*r = '\0';
+	cut(label, strchr(b, '\n') + 1, " \t\r\n", " \t\r\n");
 	if (!strcmp("$LIST$", label)) {
 		ref_insert(fd);
 	} else {
 		id = ref_add(label);
 		if (id < 0)
 			fprintf(stderr, "refer: <%s> not found\n", label);
-		sprintf(msg, "%c%d%c", b[2], id, e[2]);
+		cut(msg, b + 2, "", "\n");
+		sprintf(msg + strlen(msg), "%d", id);
+		cut(msg + strlen(msg), e + 2, "", "\n");
 		xwrite(fd, msg, strlen(msg));
 	}
 }
@@ -181,9 +185,9 @@ static void refer(int fd, char *s)
 			if (!e)
 				break;
 			xwrite(fd, l, r - l);
-			seen_ref(fd, r + 1, e + 1);
 			s = strchr(e + 1, '\n');
 			l = s;
+			seen_ref(fd, r + 1, e + 1);
 		}
 		s = r + 1;
 	}
