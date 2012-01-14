@@ -33,6 +33,14 @@ in the 256-entry PS font encoding table, tr2ps uses these glyph
 names to draw these characters in the generated postscript file.
 This would make adding new fonts to troff much easier.
 
+REFER
+=====
+
+I included my small refer clone in this package.  It assumes each entry in
+the database has an 'L' key which specifies the label of the reference.
+When referencing, only this key is searched among the references in
+the database.
+
 TODO
 ====
 
