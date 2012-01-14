@@ -160,8 +160,10 @@ static void seen_ref(int fd, char *b, char *e)
 		ref_insert(fd);
 	} else {
 		id = ref_add(label);
-		if (id < 0)
+		if (id < 0) {
 			fprintf(stderr, "refer: <%s> not found\n", label);
+			return;
+		}
 		cut(msg, b + 2, "", "\n");
 		sprintf(msg + strlen(msg), "%d", id);
 		cut(msg + strlen(msg), e + 2, "", "\n");
@@ -199,18 +201,18 @@ static char bib[BUFSZ];
 
 int main(int argc, char *argv[])
 {
-	int fd;
 	char *bfile = NULL;
 	int i = 0;
 	while (++i < argc)
 		if (!strcmp("-p", argv[i]))
 			bfile = argv[++i];
-	if (!bfile)
-		return 0;
-	fd = open(bfile, O_RDONLY);
-	xread(0, buf, sizeof(buf));
-	xread(fd, bib, sizeof(bib));
-	parserefs(bib);
+	if (bfile) {
+		int fd = open(bfile, O_RDONLY);
+		xread(fd, bib, sizeof(bib) - 1);
+		parserefs(bib);
+		close(fd);
+	}
+	xread(0, buf, sizeof(buf) - 1);
 	refer(1, buf);
 	return 0;
 }
