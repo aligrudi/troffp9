@@ -139,26 +139,6 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 		error(WARNING, "cannot find glyph, rune=0x%x stoken=<%s> troff font %s\n",
 			rune, stoken, troffontab[curtrofffontid].trfontid);
 		expecthmot = 0;
-	}
-
-	/* use the peter face in lieu of the character that we couldn't find */
-	rune = 'p';
-	stoken = "pw";
-	for (i = (mi + 1) % fontmnt; i != mi; i = (i + 1) % fontmnt) {
-		if (!*fontmtab[i])
-			continue;
-		fontid = findtfn(fontmtab[i], TRUE);
-		if (troffontab[fontid].special) {
-			cp = findglyph(fontid, rune, stoken);
-			if (cp)
-				goto foundit;
-		}
-	}
-
-	if (!cp) {
-		error(WARNING, "cannot find glyph, rune=0x%x stoken=<%s> troff font %s\n",
-			rune, stoken, troffontab[curtrofffontid].trfontid);
-		expecthmot = 0;
 		return;
 	}
 
