@@ -53,7 +53,7 @@ void paren(int leftc, int p1, int rightc)
 		if (n <= 1)
 			printf("\\(lc");
 		else
-			brack(m, "\\(lc", "\\(bv", "\\(bv");
+			brack(m, "\\(lc", "\\(lx", "\\(bv");
 		break;
 	case '{':
 		printf("\\b'\\(lt");
@@ -66,7 +66,7 @@ void paren(int leftc, int p1, int rightc)
 		brack(m, "\\(lt", "\\(bv", "\\(lb");
 		break;
 	case '[':
-		brack(m, "\\(lc", "\\(bv", "\\(lf");
+		brack(m, "\\(lc", "\\(lx", "\\(lf");
 		break;
 	case '|':
 		brack(m, "|", "|", "|");
@@ -95,7 +95,7 @@ void paren(int leftc, int p1, int rightc)
 			if (n <= 1)
 				printf("\\(rc");
 			else
-				brack(m, "\\(rc", "\\(bv", "\\(bv");
+				brack(m, "\\(rc", "\\(rx", "\\(bv");
 			break;
 		case '}':
 			printf("\\b'\\(rt");
@@ -105,7 +105,7 @@ void paren(int leftc, int p1, int rightc)
 			printf("\\(rb'");
 			break;
 		case ']':
-			brack(m, "\\(rc", "\\(bv", "\\(rf");
+			brack(m, "\\(rc", "\\(rx", "\\(rf");
 			break;
 		case ')':
 			brack(m, "\\(rt", "\\(bv", "\\(rb");
