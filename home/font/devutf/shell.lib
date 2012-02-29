@@ -720,9 +720,7 @@ SymbolCharset() {
 		(---)		/summation
 		(LT)		/parenlefttp
 		(LB)		/parenleftbt
-		(lc)		/bracketlefttp
 		(lx)		/bracketleftex
-		(lf)		/bracketleftbt
 		(lt)		/bracelefttp
 		(lk)		/braceleftmid
 		(lb)		/braceleftbt
@@ -736,9 +734,7 @@ SymbolCharset() {
 		(RT)		/parenrighttp
 		(RX)		/parenrightex
 		(RB)		/parenrightbt
-		(rc)		/bracketrighttp
 		(rx)		/bracketrightex
-		(rf)		/bracketrightbt
 		(rt)		/bracerighttp
 		(rk)		/bracerightmid
 		(rb)		/bracerightbt
@@ -746,6 +742,10 @@ SymbolCharset() {
 		(br)		(38	2	1)	% charlib
 		(LX)		(")			% synonym
 		(rn)		(50	2	1)	% charlib
+		(rc)		(38	2	1)
+		(rf)		(38	2	1)
+		(lc)		(38	2	1)
+		(lf)		(38	2	1)
 	//End of SymbolCharset
 }
 
