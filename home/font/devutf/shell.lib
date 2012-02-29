@@ -593,7 +593,6 @@ SymbolCharset() {
 		(pp)		/perpendicular
 		(ul)		/underscore
 		(_)		(")			% synonym
-		(rn)		/radicalex
 		(*a)		/alpha
 		(α)	(")
 		(*b)		/beta
@@ -720,8 +719,6 @@ SymbolCharset() {
 		(TM)		/trademarksans
 		(---)		/summation
 		(LT)		/parenlefttp
-		(br)		/parenleftex
-		(LX)		(")			% synonym
 		(LB)		/parenleftbt
 		(lc)		/bracketlefttp
 		(lx)		/bracketleftex
@@ -746,6 +743,9 @@ SymbolCharset() {
 		(rk)		/bracerightmid
 		(rb)		/bracerightbt
 		(~=)		(55	0	1)	% charlib
+		(br)		(38	2	1)	% charlib
+		(LX)		(")			% synonym
+		(rn)		(50	2	1)	% charlib
 	//End of SymbolCharset
 }
 
