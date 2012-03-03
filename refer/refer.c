@@ -123,7 +123,7 @@ static void ref_insert(int fd)
 	int i, j;
 	char *s = list;
 	int kind;
-	s += sprintf(s, ".]<\n");
+	s += sprintf(s, "\n.]<\n");
 	for (i = 1; i < nadded; i++) {
 		s += sprintf(s, ".ds [F %d\n", i);
 		s += sprintf(s, ".]-\n");
@@ -138,9 +138,11 @@ static void ref_insert(int fd)
 		}
 		s += sprintf(s, ".][ %d %s\n", kind, kinds[kind]);
 	}
+	s += sprintf(s, ".]>");
 	xwrite(fd, list, s - list);
 }
 
+/* strcpy from s to d; ignore the initial jump chars and stop at stop chars */
 static void cut(char *d, char *s, char *jump, char *stop)
 {
 	while (strchr(jump, *s))
