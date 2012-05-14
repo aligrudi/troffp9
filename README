@@ -40,7 +40,9 @@ I included my small refer clone in this package.  It assumes each entry in
 the database has an 'L' key which specifies the label of the reference.
 When referencing, only this key is searched among the references in
 the database.  Also only one occurrence of 'A' key is supported at the
-moment.
+moment.  A new -m parameter has been added to allow multiple references
+in a single .[/.] macro, as white space separated list of labels; refer
+tries to use reference intervals for these references if possible.
 
 TODO
 ====

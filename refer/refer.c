@@ -1,7 +1,7 @@
 /*
  * refer - a small refer clone
  *
- * Copyright (C) 2011-2012 Ali Gholami Rudi
+ * Copyright (C) 2011-2012 Ali Gholami Rudi <ali at rudi dot ir>
  */
 #include <ctype.h>
 #include <fcntl.h>
@@ -24,6 +24,8 @@ static int nrefs;
 /* referred references */
 static struct ref *added[NREFS];
 static int nadded = 1;
+
+static int multiref;		/* allow specifying multiple references */
 
 #define ref_label(ref)		((ref)->keys['L'])
 
@@ -152,25 +154,60 @@ static void cut(char *d, char *s, char *jump, char *stop)
 	*d = '\0';
 }
 
+static int intcmp(void *v1, void *v2)
+{
+	return *(int *) v1 - *(int *) v2;
+}
+
+/* replace .[ .] macros with reference numbers */
 static void seen_ref(int fd, char *b, char *e)
 {
 	char msg[128];
 	char label[128];
-	int id;
-	cut(label, strchr(b, '\n') + 1, " \t\r\n", " \t\r\n");
-	if (!strcmp("$LIST$", label)) {
-		ref_insert(fd);
-	} else {
-		id = ref_add(label);
-		if (id < 0) {
-			fprintf(stderr, "refer: <%s> not found\n", label);
-			return;
+	char *s, *r;
+	int id[128];
+	int nid = 0;
+	int i;
+	s = strchr(b, '\n') + 1;
+	while (!nid || multiref) {
+		r = label;
+		while (s < e && isspace(*s))
+			s++;
+		while (s < e && !isspace(*s))
+			*r++ = *s++;
+		*r = '\0';
+		if (s >= e)
+			break;
+		if (!strcmp("$LIST$", label)) {
+			ref_insert(fd);
+			break;
 		}
-		cut(msg, b + 2, "", "\n");
-		sprintf(msg + strlen(msg), "%d", id);
-		cut(msg + strlen(msg), e + 2, "", "\n");
-		xwrite(fd, msg, strlen(msg));
+		id[nid] = ref_add(label);
+		if (id[nid] < 0)
+			fprintf(stderr, "refer: <%s> not found\n", label);
+		else
+			nid++;
 	}
+	/* reading characters after .[ */
+	cut(msg, b + 2, "", "\n");
+	/* sorting references for better reference intervals */
+	qsort(id, nid, sizeof(id[0]), intcmp);
+	i = 0;
+	while (i < nid) {
+		int beg = i++;
+		/* reading reference intervals */
+		while (i < nid && id[i] == id[i - 1] + 1)
+			i++;
+		if (beg)
+			sprintf(msg + strlen(msg), ",");
+		if (beg + 1 < i)
+			sprintf(msg + strlen(msg), "%d\\-%d", id[beg], id[i - 1]);
+		else
+			sprintf(msg + strlen(msg), "%d", id[beg]);
+	}
+	/* reading characters after .] */
+	cut(msg + strlen(msg), e + 2, "", "\n");
+	xwrite(fd, msg, strlen(msg));
 }
 
 static void refer(int fd, char *s)
@@ -205,9 +242,12 @@ int main(int argc, char *argv[])
 {
 	char *bfile = NULL;
 	int i = 0;
-	while (++i < argc)
-		if (!strcmp("-p", argv[i]))
-			bfile = argv[++i];
+	while (++i < argc) {
+		if (!strcmp("-m", argv[i]))
+			multiref = 1;
+		if (argv[i][0] == '-' && argv[i][1] == 'p')
+			bfile = argv[i][2] ? argv[i] + 2 : argv[++i];
+	}
 	if (bfile) {
 		int fd = open(bfile, O_RDONLY);
 		xread(fd, bib, sizeof(bib) - 1);
