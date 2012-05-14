@@ -200,10 +200,11 @@ static void seen_ref(int fd, char *b, char *e)
 			i++;
 		if (beg)
 			sprintf(msg + strlen(msg), ",");
-		if (beg + 1 < i)
-			sprintf(msg + strlen(msg), "%d\\-%d", id[beg], id[i - 1]);
-		else
+		if (beg == i - 1)
 			sprintf(msg + strlen(msg), "%d", id[beg]);
+		else
+			sprintf(msg + strlen(msg), "%d%s%d",
+				id[beg], beg < i - 2 ? "\\-" : ",", id[i - 1]);
 	}
 	/* reading characters after .] */
 	cut(msg + strlen(msg), e + 2, "", "\n");
