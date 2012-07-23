@@ -14,69 +14,22 @@
 
 struct ref {
 	char *keys[128];	/* reference keys */
+	char *auth[128];	/* authors */
 	int id;			/* allocated reference id */
+	int nauth;
 };
 
-/* all references */
-static struct ref refs[NREFS];
+static struct ref refs[NREFS];	/* all references in refer db */
 static int nrefs;
-
-/* referred references */
-static struct ref *added[NREFS];
+static struct ref *added[NREFS];/* cited references */
 static int nadded = 1;
-
+static int inserted;		/* number of inserted references */
 static int multiref;		/* allow specifying multiple references */
+static int accumulate;		/* accumulate all references */
 
 #define ref_label(ref)		((ref)->keys['L'])
 
-static int ref_add(char *label)
-{
-	int i;
-	for (i = 0; i < nrefs; i++)
-		if (ref_label(&refs[i]) && !strcmp(label, ref_label(&refs[i])))
-			break;
-	if (i == nrefs)
-		return -1;
-	if (!refs[i].id) {
-		refs[i].id = nadded++;
-		added[refs[i].id] = &refs[i];
-	}
-	return refs[i].id;
-}
-
-/* parse a refer-style bib file */
-static int parserefs(char *s)
-{
-	char *beg, *end;
-	struct ref *ref;
-	while (*s) {
-		ref = &refs[nrefs];
-		while (isspace(*s))
-			s++;
-		while (*s != '\n') {
-			beg = s;
-			end = strchr(s, '\n');
-			if (!end) {
-				s = strchr(s, '\0');
-				break;
-			}
-			*end = '\0';
-			if (s[0] == '%' && s[1] >= 'A' && s[1] <= 'Z') {
-				char *r = s + 2;
-				while (isspace(*r))
-					r++;
-				ref->keys[(unsigned) s[1]] = r;
-			}
-			s = end + 1;
-			while (*s == ' ' || *s == '\t')
-				s++;
-		}
-		nrefs++;
-	}
-	return 0;
-}
-
-int xread(int fd, char *buf, int len)
+static int xread(int fd, char *buf, int len)
 {
 	int nr = 0;
 	while (nr < len) {
@@ -88,7 +41,7 @@ int xread(int fd, char *buf, int len)
 	return nr;
 }
 
-int xwrite(int fd, char *buf, int len)
+static int xwrite(int fd, char *buf, int len)
 {
 	int nw = 0;
 	while (nw < len) {
@@ -98,6 +51,43 @@ int xwrite(int fd, char *buf, int len)
 		nw += ret;
 	}
 	return nw;
+}
+
+/* read a single refer record */
+static char *db_ref(char *s, struct ref *ref)
+{
+	char *beg, *end;
+	while (*s != '\n') {
+		beg = s;
+		end = strchr(s, '\n');
+		if (!end)
+			return strchr(s, '\0');
+		*end = '\0';
+		if (s[0] == '%' && s[1] >= 'A' && s[1] <= 'Z') {
+			char *r = s + 2;
+			while (isspace(*r))
+				r++;
+			if (s[1] == 'A')
+				ref->auth[ref->nauth++] = r;
+			else
+				ref->keys[(unsigned) s[1]] = r;
+		}
+		s = end + 1;
+		while (*s == ' ' || *s == '\t')
+			s++;
+	}
+	return s;
+}
+
+/* parse a refer-style bib file and fill refs[] */
+static int db_parse(char *s)
+{
+	while (*s) {
+		while (isspace(*s))
+			s++;
+		s = db_ref(s, &refs[nrefs++]);
+	}
+	return 0;
 }
 
 static char fields[] = "LTABRJDVNPITO";
@@ -119,29 +109,44 @@ static int ref_kind(struct ref *r)
 
 static char list[BUFSZ];
 
-/* insert references */
-static void ref_insert(int fd)
+/* print the given reference */
+static void ins_ref(int fd, struct ref *ref, int id)
 {
-	int i, j;
 	char *s = list;
-	int kind;
-	s += sprintf(s, "\n.]<\n");
-	for (i = 1; i < nadded; i++) {
-		s += sprintf(s, ".ds [F %d\n", i);
-		s += sprintf(s, ".]-\n");
-		kind = ref_kind(added[i]);
-		for (j = 'A'; j <= 'Z'; j++) {
-			char *val = added[i]->keys[j];
-			if (!val && !strchr(fields, j))
-				continue;
-			s += sprintf(s, ".ds [%c %s\n", j, val ? val : "");
-			if (strchr(fields_flag, j))
-				s += sprintf(s, ".nr [%c 1\n", j);
-		}
-		s += sprintf(s, ".][ %d %s\n", kind, kinds[kind]);
+	int kind = ref_kind(ref);
+	int j;
+	s += sprintf(s, ".ds [F %d\n", id);
+	s += sprintf(s, ".]-\n");
+	if (ref->nauth) {
+		s += sprintf(s, ".ds [A ");
+		for (j = 0; j < ref->nauth; j++)
+			s += sprintf(s, "%s%s", j ? ", " : "", ref->auth[j]);
+		s += sprintf(s, "\n");
 	}
-	s += sprintf(s, ".]>");
+	for (j = 'B'; j <= 'Z'; j++) {
+		char *val = ref->keys[j];
+		if (!val || !strchr(fields, j))
+			continue;
+		s += sprintf(s, ".ds [%c %s\n", j, val ? val : "");
+		if (strchr(fields_flag, j))
+			s += sprintf(s, ".nr [%c 1\n", j);
+	}
+	s += sprintf(s, ".][ %d %s", kind, kinds[kind]);
 	xwrite(fd, list, s - list);
+}
+
+/* print all references */
+static void ins_all(int fd)
+{
+	int i;
+	char *beg = "\n.]<\n";
+	char *end = ".]>";
+	xwrite(fd, beg, strlen(beg));
+	for (i = 1; i < nadded; i++) {
+		ins_ref(fd, added[i], i);
+		write(fd, "\n", 1);
+	}
+	xwrite(fd, end, strlen(end));
 }
 
 /* strcpy from s to d; ignore the initial jump chars and stop at stop chars */
@@ -159,8 +164,24 @@ static int intcmp(void *v1, void *v2)
 	return *(int *) v1 - *(int *) v2;
 }
 
+/* the given label was referenced; add it to added[] */
+static int refer_seen(char *label)
+{
+	int i;
+	for (i = 0; i < nrefs; i++)
+		if (ref_label(&refs[i]) && !strcmp(label, ref_label(&refs[i])))
+			break;
+	if (i == nrefs)
+		return -1;
+	if (!refs[i].id) {
+		refs[i].id = nadded++;
+		added[refs[i].id] = &refs[i];
+	}
+	return refs[i].id;
+}
+
 /* replace .[ .] macros with reference numbers */
-static void seen_ref(int fd, char *b, char *e)
+static void refer_cite(int fd, char *b, char *e)
 {
 	char msg[128];
 	char label[128];
@@ -168,6 +189,7 @@ static void seen_ref(int fd, char *b, char *e)
 	int id[128];
 	int nid = 0;
 	int i;
+	/* parse to see what is inside .[ and .]*/
 	s = strchr(b, '\n') + 1;
 	while (!nid || multiref) {
 		r = label;
@@ -179,18 +201,18 @@ static void seen_ref(int fd, char *b, char *e)
 		if (s >= e)
 			break;
 		if (!strcmp("$LIST$", label)) {
-			ref_insert(fd);
+			ins_all(fd);
 			break;
 		}
-		id[nid] = ref_add(label);
+		id[nid] = refer_seen(label);
 		if (id[nid] < 0)
 			fprintf(stderr, "refer: <%s> not found\n", label);
 		else
 			nid++;
 	}
-	/* reading characters after .[ */
+	/* read characters after .[ */
 	cut(msg, b + 2, "", "\n");
-	/* sorting references for better reference intervals */
+	/* sort references for cleaner reference intervals */
 	qsort(id, nid, sizeof(id[0]), intcmp);
 	i = 0;
 	while (i < nid) {
@@ -206,11 +228,19 @@ static void seen_ref(int fd, char *b, char *e)
 			sprintf(msg + strlen(msg), "%d%s%d",
 				id[beg], beg < i - 2 ? "\\-" : ",", id[i - 1]);
 	}
-	/* reading characters after .] */
+	/* read characters after .] */
 	cut(msg + strlen(msg), e + 2, "", "\n");
 	xwrite(fd, msg, strlen(msg));
+	/* insert the reference if not accumulating them */
+	if (!accumulate) {
+		for (i = 0; i < nid; i++) {
+			write(fd, "\n", 1);
+			ins_ref(fd, added[id[i]], ++inserted);
+		}
+	}
 }
 
+/* read the input s and write refer output to fd */
 static void refer(int fd, char *s)
 {
 	char *l = s;
@@ -229,7 +259,7 @@ static void refer(int fd, char *s)
 			xwrite(fd, l, r - l);
 			s = strchr(e + 1, '\n');
 			l = s;
-			seen_ref(fd, r + 1, e + 1);
+			refer_cite(fd, r + 1, e + 1);
 		}
 		s = r + 1;
 	}
@@ -246,13 +276,15 @@ int main(int argc, char *argv[])
 	while (++i < argc) {
 		if (!strcmp("-m", argv[i]))
 			multiref = 1;
+		if (!strcmp("-e", argv[i]))
+			accumulate = 1;
 		if (argv[i][0] == '-' && argv[i][1] == 'p')
 			bfile = argv[i][2] ? argv[i] + 2 : argv[++i];
 	}
 	if (bfile) {
 		int fd = open(bfile, O_RDONLY);
 		xread(fd, bib, sizeof(bib) - 1);
-		parserefs(bib);
+		db_parse(bib);
 		close(fd);
 	}
 	xread(0, buf, sizeof(buf) - 1);

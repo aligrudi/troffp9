@@ -36,13 +36,12 @@ This would make adding new fonts to troff much easier.
 REFER
 =====
 
-I included my small refer clone in this package.  It assumes each entry in
-the database has an 'L' key which specifies the label of the reference.
-When referencing, only this key is searched among the references in
-the database.  Also only one occurrence of 'A' key is supported at the
-moment.  A new -m parameter has been added to allow multiple references
+I included my small refer clone in this package.  It assumes each record
+in the database has an 'L' key which specifies the label of the record.
+When referencing, only this key is searched among the records in the
+database.  A new -m parameter has been added to allow multiple references
 in a single .[/.] macro, as white space separated list of labels; refer
-tries to use reference intervals for these references if possible.
+tries to use reference intervals if possible.
 
 TODO
 ====
