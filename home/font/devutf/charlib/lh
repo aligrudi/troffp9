@@ -15,7 +15,7 @@ currentpoint translate
 27 170 lineto
 19 172 lineto
 16 177 lineto
-fill
+stroke
 
 38 194 moveto
 38 196 lineto
@@ -128,7 +128,7 @@ fill
 43 178 lineto
 43 187 lineto
 38 194 lineto
-fill
+stroke
 
 373 169 moveto
 373 176 lineto
@@ -160,7 +160,7 @@ fill
 375 147 lineto
 374 158 lineto
 373 169 lineto
-fill
+stroke
 
 grestore
 } def
