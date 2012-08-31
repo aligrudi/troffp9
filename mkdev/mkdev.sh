@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # path of troff data directory
-TBASE="/root/troff/home"
+TBASE="../home"
 DEV="utf"
 
 DST=$TBASE/font/dev$DEV
