@@ -12,8 +12,5 @@ for f in $ALL
 do
 	echo $f
 	sh trofftable.sh -D$TBASE/ps/prologues/dpost.ps -L./trofftable.ps \
-			-F$TBASE/font -T$DEV $f >out.ps
-	ps2pdf out.ps >$DST/$f
+			-F$TBASE/font -T$DEV $f | ps2pdf - /dev/null 2>$DST/$f 1>&2
 done
-
-rm out.ps out.pdf
