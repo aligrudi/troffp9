@@ -37,12 +37,52 @@ extern void sadd(char *);
 extern void cadd(int);
 extern int trans(int, char *);
 
+static int readutf8(int *dst, char *src)
+{
+	int l = 1;
+	char *s = src;
+	if (!*s)
+		return 0;
+	if (~*s & 0xc0) {
+		*dst = *s;
+		return 1;
+	}
+	while (l < 6 && *s & (0x40 >> l))
+		l++;
+	*dst = (0x3f >> l) & *s++;
+	while (l--)
+		*dst = (*dst << 6) | (*s++ & 0x3f);
+	return s - src;
+}
+
+static int writeutf8(char *dst, int c)
+{
+	char *d = dst;
+	int l;
+	if (c > 0xffff) {
+		*d++ = 0xf0 | (c >> 18);
+		l = 3;
+	} else if (c > 0x7ff) {
+		*d++ = 0xe0 | (c >> 12);
+		l = 2;
+	} else if (c > 0x7f) {
+		*d++ = 0xc0 | (c >> 6);
+		l = 1;
+	} else {
+		*d++ = c > 0 ? c : ' ';
+		l = 0;
+	}
+	while (l--)
+		*d++ = 0x80 | ((c >> (l * 6)) & 0x3f);
+	return d - dst;
+}
+
 int textc(void)	/* read next UTF rune from psp */
 {
-	wchar_t r;
+	int r;
 	int w;
 
-	w = mbtowc(&r, psp, 3);
+	w = readutf8(&r, psp);
 	if(w == 0){
 		psp++;
 		return 0;
@@ -312,7 +352,7 @@ void cadd(int c)		/* add character c to end of cs */
 		}
 		lastft = nextft;
 	}
-	w = wctomb(csp, c);
+	w = writeutf8(csp, c);
 	if(w > 0)	/* ignore bad characters */
 		csp += w;
 }
