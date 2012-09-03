@@ -120,16 +120,21 @@
 	/tmp-font exch definefont
 } bind def
 
-% Given an array, charset, containing troff char names (even entries) and
-% PS font names (odd entries), we generate troff font tables in three steps:
+% print troff font glyph table for the given glyphs
 %
-% 1. generate chcodes array that contains the mapping of input character
-%    in current font encoding (256 for characters not in encoding array)
-% 2. generate a temporary encoding array for charset (for finding the
-%    width of characters)
-% 3. create a temporary font with this new encoding array
-% 4. print troff table columns for each character in charset
-/BuildFontCharset {
+% This function assumes "charset" global array contains troff
+% character names (even entries) and PS font names (odd entries);
+% see the list in StandardCharset function in shell.lib of devutf
+% for an example.  From this array, this function generates troff
+% font tables in three steps:
+%
+% 1. Initialize chcodes array to contain the position of charset characters
+%    in the encoding array of the current font (256 for characters not present)
+% 2. Generate a temporary font encoding array for the characters in charset
+%   (for finding the width of characters)
+% 3. Create a temporary font with this new encoding array
+% 4. Print troff table columns for each character in charset array
+/BuildFontCharset256 {
 	% create the charcode array
 	/chcodes charset length 2 idiv array def
 	0 2 charset length 2 sub {
@@ -178,6 +183,22 @@
 		} ifelse
 	} for
 
+} def
+
+% call BuildFontCharset256 for charsets of at most 256 characters
+%
+% BuildFontCharset256 assumes the charset array contains at most
+% 256 characters.  This function splits the charset array
+% otherwise and calls BuildFontCharset256 multiple times.
+/BuildFontCharset {
+	/charset2 charset def
+	0 512 charset2 length {
+		/i exch def
+		/len charset2 length i 512 add le { charset2 length i sub } {512} ifelse def
+		/charset charset2 i len getinterval def
+		BuildFontCharset256
+	} for
+	/charset charset2 def
 } def
 
 /BuildDescCharset {
