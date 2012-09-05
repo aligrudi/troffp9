@@ -20,18 +20,18 @@ the ones included in Plan9 and are generated using mkdev tool
 (included in this package).  But you can use the ones from Plan9
 too.
 
-DPOST CHANGES
+TR2PS CHANGES
 =============
 
-tr2ps no longer reads TBASE/ps/troff/* files to find the mapping
-between troff fonts and PS fonts.  Each troff font is mapped to
-exactly one PS font which is declared as fontname in font
-description files.  So tr2ps reads only troff description files.
-UTF8 entries in troff font files work as before but the fifth column
-now denotes a glyph's postscript name if available.  For glyphs not
-in the 256-entry PS font encoding table, tr2ps uses these glyph
-names to draw these characters in the generated postscript file.
-This would make adding new fonts to troff much easier.
+Each troff font is mapped to exactly one PS font, which is declared as
+fontname in the troff font description file.  As a result, tr2ps can
+find out the mapping of between troff characters and postscript glyphs
+by reading only the troff description files.  UTF8 entries in troff font
+files work as before and the first column can be any UTF8 character.
+The fifth column, however, denotes glyphs' postscript names if present.
+For glyphs not in the 256-entry PS font encoding table, tr2ps uses these
+glyph names to output those characters in the generated postscript file.
+This makes adding new fonts to troff much easier.
 
 REFER
 =====
