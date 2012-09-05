@@ -155,6 +155,7 @@
 	} for
 
 	% use the new font
+	/prevfontdict currentfontdict def
 	/currentfontdict tmpenc currentfontdict TMPFont def
 	currentfontdict setfont
 
@@ -182,7 +183,8 @@
 			(\n) Print
 		} ifelse
 	} for
-
+	% restore the original font
+	/currentfontdict prevfontdict def
 } def
 
 % call BuildFontCharset256 for charsets of at most 256 characters
