@@ -125,9 +125,40 @@
 /g {neg moveto {glyphshow} forall} bind def
 /done {/lastpage where {pop lastpage} if} def
 
+% caching fonts returned from findfont in fncache
+/fncache 7 array def
+/fncidx 0 def
+/fontlookup {
+	/fsize exch def
+	/fname exch def
+	/font null def
+	fncache {
+		/ent exch def
+		ent null eq not {
+			ent 0 get fname eq {
+				/font ent 1 get def
+			} if
+		} if
+	} forall
+	font null eq {
+		/font fname findfont def
+		fncache fncidx [fname font] put
+		/fncidx fncidx 1 add def
+		fncidx fncache length ge {
+			/fncidx 0 def
+		} if
+	} if
+	font fsize scalefont
+} bind def
+
+% ideally it should have been more efficient to replace "fontlookup
+% setfont" with "selectfont"; according to adobe docs selectfont
+% should cache fonts but ghostscript's implementation doesn't, so
+% we do our own caching in fontlookup.
 /f {
-	dup /font exch def findfont exch
-	dup /ptsize exch def scaling div dup /size exch def scalefont setfont
+	/font exch def /ptsize exch def
+	ptsize scaling div /size exch def
+	font size fontlookup setfont
 	linewidth ptsize mul scaling 10 mul div setlinewidth
 	/spacewidth ( ) stringwidth pop def
 } bind def
