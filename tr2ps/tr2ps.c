@@ -52,8 +52,8 @@ void prologues(void)
 	char charlibname[MAXTOKENSIZE];
 
 	fprintf(fout, "%s", CONFORMING);
-	fprintf(fout, "%s %s\n", VERSION, PROGRAMVERSION);
-	fprintf(fout, "%s %s\n", CREATOR, PROGRAMNAME);
+	fprintf(fout, "%s %s\n", VERSION, PROGVER);
+	fprintf(fout, "%s %s\n", CREATOR, PROGNAME);
 	fprintf(fout, "%s %s\n", DOCUMENTFONTS, ATEND);
 	fprintf(fout, "%s %s\n", PAGES, ATEND);
 	fprintf(fout, "%s", ENDCOMMENTS);

@@ -5,10 +5,6 @@
  *
  */
 
-#ifndef PROGRAMVERSION
-#define PROGRAMVERSION	"3.3.2"
-#endif
-
 #define NON_FATAL	0
 #define FATAL		1
 #define USER_FATAL	2
