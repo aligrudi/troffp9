@@ -299,6 +299,11 @@ StandardCharset() {
 		("a)	/hungarumlaut		% devpost accent
 		(Ca)	/ogonek			% devpost accent
 		(va)	/caron			% devpost accent
+		(fi)	/fi
+		(fl)	/fl
+		(ff)	/ff
+		(Fi)	/ffi
+		(Fl)	/ffl
 	//End of StandardCharset
 }
 
