@@ -745,12 +745,12 @@ SymbolCharset() {
 		(rb)		/bracerightbt
 		(~=)		(55	0	1)	% charlib
 		(br)		(38	2	1)	% charlib
-		(LX)		(")			% synonym
+		(LX)		(")			% charlib synonym
 		(rn)		(50	2	1)	% charlib
-		(rc)		(38	2	1)
-		(rf)		(38	2	1)
-		(lc)		(38	2	1)
-		(lf)		(38	2	1)
+		(rc)		(38	2	1)	% charlib
+		(rf)		(38	2	1)	% charlib
+		(lc)		(38	2	1)	% charlib
+		(lf)		(38	2	1)	% charlib
 	//End of SymbolCharset
 }
 
@@ -815,6 +815,7 @@ Proportional() {
 			}
 			{printf "%s\t%s\n", $1, $2}
 		'
+		SymbolCharset | grep -v "\((ul)\|/underscore\)" | grep -v "charlib"
 	echo "] def"
 
 	echo "/$2 SelectFont"
