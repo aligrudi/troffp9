@@ -106,10 +106,10 @@ struct tune {
 	"dotdot_def",	"\\f1\\v'-.67m'..\\v'.67m'\\fP",
 	"utilde_def",	"\\f1\\v'1.0m'\\s+2~\\s-2\\v'-1.0m'\\fP",
   /* funny.c */
-	"sum_def",	"\\|\\v'.3m'\\s+5\\(*S\\s-5\\v'-.3m'\\|",
-	"union_def",	"\\|\\v'.3m'\\s+5\\(cu\\s-5\\v'-.3m'\\|",
-	"inter_def",	"\\|\\v'.3m'\\s+5\\(ca\\s-5\\v'-.3m'\\|",
-	"prod_def",	"\\|\\v'.3m'\\s+5\\(*P\\s-5\\v'-.3m'\\|",
+	"sum_def",	"\\|\\v'.2m'\\s+5\\(su\\s-5\\v'-.2m'\\|",
+	"union_def",	"\\|\\v'.2m'\\s+5\\(cu\\s-5\\v'-.2m'\\|",
+	"inter_def",	"\\|\\v'.2m'\\s+5\\(ca\\s-5\\v'-.2m'\\|",
+	"prod_def",	"\\|\\v'.2m'\\s+5\\(pr\\s-5\\v'-.2m'\\|",
   /* integral.c */
 	"int_def",	"\\v'.1m'\\s+4\\(is\\s-4\\v'-.1m'",
 	0, 0

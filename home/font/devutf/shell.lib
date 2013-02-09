@@ -701,7 +701,7 @@ SymbolCharset() {
 		(rg)		/registerserif
 		(co)		/copyrightserif
 		(tm)		/trademarkserif
-		(---)		/product
+		(pr)		/product
 		(sr)		/radical
 		(c.)		/dotmath
 		(no)		/logicalnot
@@ -717,7 +717,7 @@ SymbolCharset() {
 		(RG)		/registersans
 		(CO)		/copyrightsans
 		(TM)		/trademarksans
-		(---)		/summation
+		(su)		/summation
 		(LT)		/parenlefttp
 		(LB)		/parenleftbt
 		(lx)		/bracketleftex
