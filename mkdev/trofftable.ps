@@ -158,6 +158,7 @@
 	/prevfontdict currentfontdict def
 	/currentfontdict tmpenc currentfontdict TMPFont def
 	currentfontdict setfont
+	/lastvalid 0 def		% last character was valid if 1
 
 	% print troff table
 	0 2 charset length 2 sub {
@@ -167,20 +168,30 @@
 		/curcode i 2 idiv def		% tmpenc chcode
 		/chcode chcodes curcode get def	% original chcode
 		val type /stringtype eq {
-			key Print
-			(\t) Print val Print
-			(\n) Print
-		}{
-			chcode octalescapes ge key (---) eq and {
-				(\\0) Print chcode 8 (   ) cvrs Print
-			}{key Print} ifelse
-			(\t) Print curcode GetWidth Print
-			(\t) Print curcode GetAscender Print
-			(\t) Print chcode Print
-			chcode startcomments ge {
+			lastvalid 1 eq {
+				key Print
 				(\t) Print val Print
+				(\n) Print
 			} if
-			(\n) Print
+		}{
+			% output only available glyphs
+			currentfontdict /CharStrings get val known {
+				chcode octalescapes ge key (---) eq and {
+					(\\0) Print chcode 8 (   ) cvrs Print
+				}{
+					key Print
+				} ifelse
+				(\t) Print curcode GetWidth Print
+				(\t) Print curcode GetAscender Print
+				(\t) Print chcode Print
+				chcode startcomments ge {
+					(\t) Print val Print
+				} if
+				(\n) Print
+				/lastvalid 1 def
+			}{
+				/lastvalid 0 def
+			} ifelse
 		} ifelse
 	} for
 	% restore the original font
