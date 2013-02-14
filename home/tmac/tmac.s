@@ -1,5 +1,4 @@
 .lg 0
-.\"ds sd /sys/lib/tmac
 .ds sd \*(.P/tmac
 .\"	RT -  reset everything to normal state
 .de RT

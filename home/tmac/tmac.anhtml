@@ -1,4 +1,4 @@
-.so /sys/lib/tmac/tmac.an
+.so \*(.P/tmac/tmac.an
 .de }H
 ..
 .de }F
