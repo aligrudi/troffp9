@@ -144,7 +144,7 @@ void glyphout(uc_t rune, char *stoken, int specialflag)
 
 foundit:
 	/* set the correct font */
-	setpsfont(findpfn(troffontab[fontid].psfontid, 1), fontsize);
+	setpsfont(findpfn(troffontab[fontid].psfontid), fontsize);
 
 	if (cp->charnum == 0x0001) {	/* character is in charlib */
 		endstring();
@@ -195,8 +195,6 @@ void runeout(uc_t rune)
 void specialout(char *stoken)
 {
 	uc_t rune;
-	int i;
-
-	i = uc_dec(&rune, stoken);
+	uc_dec(&rune, stoken);
 	glyphout(rune, stoken, TRUE);
 }

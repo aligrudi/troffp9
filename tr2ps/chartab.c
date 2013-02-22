@@ -99,23 +99,16 @@ void setpsfont(int psftid, int fontsize)
 	}
 }
 
-/* find index of PostScript font name in table
- * returns -1 if name is not in table
- * If insflg is not zero
- * and the name is not found in the table, insert it.
- */
-int findpfn(char *fontname, int insflg)
+/* find index of PS font name in table; insert it if not present */
+int findpfn(char *fontname)
 {
 	int i;
 	for (i = 0; i < pfnamcnt; i++)
 		if (strcmp(pfnafontmtab[i].str, fontname) == 0)
 			return i;
-	if (insflg) {
-		strcpy(pfnafontmtab[pfnamcnt].str, fontname);
-		pfnafontmtab[pfnamcnt].used = 0;
-		return pfnamcnt++;
-	}
-	return -1;
+	strcpy(pfnafontmtab[pfnamcnt].str, fontname);
+	pfnafontmtab[pfnamcnt].used = 0;
+	return pfnamcnt++;
 }
 
 static int utf8len(char *s)

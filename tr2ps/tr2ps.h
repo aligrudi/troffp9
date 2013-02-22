@@ -39,16 +39,6 @@ struct charent {
 	struct charent *next;
 };
 
-/* these entries map troff character code ranges to
- * postscript font and character ranges.
- */
-struct psfent {
-	int start;
-	int end;
-	int offset;
-	int psftid;
-};
-
 struct troffont {
 	char trfontid[MAXFONTNAME];	/* the common troff font name e.g., `R' */
 	char psfontid[MAXFONTNAME];	/* the ps font name e.g, 'Times-Roman' */
@@ -79,6 +69,7 @@ void flushtext(void);
 void t_charht(int);
 void t_slant(int);
 void setpsfont(int, int);
+int findpfn(char *fontname);
 void settrfont(void);
 int hash(char *, int);
 int readDESC(void);

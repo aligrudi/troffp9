@@ -78,6 +78,8 @@ void conv(struct ustr *ustr)
 		case 'w':	/* paddable word space (information only) */
 			break;
 		case 'D':	/* graphics function */
+			/* flush ps font before drawing pictures */
+			setpsfont(findpfn(troffontab[fontpos].psfontid), fontsize);
 			draw(ustr);
 			break;
 		case 'x':	/* device control functions */
