@@ -112,104 +112,104 @@ xo	44	2	168
 cr	"
 Y-	44	3	165
 yn	"
-||	52	2	256	brokenbar
+||	52	2	brokenbar
 so	42	3	167
 sc	"
 ""	36	2	200
 :a	"
-co	74	2	256	copyright
+co	74	2	copyright
 a_	26	2	227
 <<	34	0	171
--,	52	0	256	logicalnot
+-,	52	0	logicalnot
 hy	28	0	45
---	52	0	256	minus
-ro	74	2	256	registered
+--	52	0	minus
+ro	74	2	registered
 rg	"
 -^	44	2	197
 -a	"
-0^	40	2	256	degree
-+-	52	2	256	plusminus
-2^	26	2	256	twosuperior
-3^	26	2	256	threesuperior
+0^	40	2	degree
++-	52	2	plusminus
+2^	26	2	twosuperior
+3^	26	2	threesuperior
 \'	30	2	194
 aa	"
-/u	46	1	256	mu
+/u	46	1	mu
 P!	50	3	182
 pg	"
 .^	22	0	180
 ,,	30	1	203
 ,a	"
-1^	26	2	256	onesuperior
+1^	26	2	onesuperior
 o_	26	2	235
 >>	38	0	187
-14	66	2	256	onequarter
-12	66	2	256	onehalf
-34	66	2	256	threequarters
+14	66	2	onequarter
+12	66	2	onehalf
+34	66	2	threequarters
 ??	40	1	191
-A`	62	2	256	Agrave
-A'	62	2	256	Aacute
-A^	62	2	256	Acircumflex
-A~	62	2	256	Atilde
-A"	62	2	256	Adieresis
-A*	62	2	256	Aring
+A`	62	2	Agrave
+A'	62	2	Aacute
+A^	62	2	Acircumflex
+A~	62	2	Atilde
+A"	62	2	Adieresis
+A*	62	2	Aring
 AE	74	2	225
-C,	52	3	256	Ccedilla
-E`	62	2	256	Egrave
-E'	62	2	256	Eacute
-E^	62	2	256	Ecircumflex
-E"	62	2	256	Edieresis
-I`	38	2	256	Igrave
-I'	38	2	256	Iacute
-I^	38	2	256	Icircumflex
-I"	38	2	256	Idieresis
-D-	70	2	256	Eth
-N~	70	3	256	Ntilde
-O`	60	2	256	Ograve
-O'	60	2	256	Oacute
-O^	60	2	256	Ocircumflex
-O~	60	2	256	Otilde
-O"	60	2	256	Odieresis
-xx	52	0	256	multiply
+C,	52	3	Ccedilla
+E`	62	2	Egrave
+E'	62	2	Eacute
+E^	62	2	Ecircumflex
+E"	62	2	Edieresis
+I`	38	2	Igrave
+I'	38	2	Iacute
+I^	38	2	Icircumflex
+I"	38	2	Idieresis
+D-	70	2	Eth
+N~	70	3	Ntilde
+O`	60	2	Ograve
+O'	60	2	Oacute
+O^	60	2	Ocircumflex
+O~	60	2	Otilde
+O"	60	2	Odieresis
+xx	52	0	multiply
 O/	66	3	233
-U`	74	2	256	Ugrave
-U'	74	2	256	Uacute
-U^	74	2	256	Ucircumflex
-U"	74	2	256	Udieresis
-Y'	56	3	256	Yacute
-TH	54	2	256	Thorn
+U`	74	2	Ugrave
+U'	74	2	Uacute
+U^	74	2	Ucircumflex
+U"	74	2	Udieresis
+Y'	56	3	Yacute
+TH	54	2	Thorn
 ss	42	3	251
-a`	42	2	256	agrave
-a'	42	2	256	aacute
-a^	42	2	256	acircumflex
-a~	42	2	256	atilde
-a"	42	2	256	adieresis
-a*	42	2	256	aring
+a`	42	2	agrave
+a'	42	2	aacute
+a^	42	2	acircumflex
+a~	42	2	atilde
+a"	42	2	adieresis
+a*	42	2	aring
 ae	54	0	241
-c,	34	1	256	ccedilla
-e`	34	2	256	egrave
-e'	34	2	256	eacute
-e^	34	2	256	ecircumflex
-e"	34	2	256	edieresis
-i`	24	2	256	igrave
-i'	24	2	256	iacute
-i^	24	2	256	icircumflex
-i"	24	2	256	idieresis
-d-	40	2	256	eth
-n~	46	2	256	ntilde
-o`	40	2	256	ograve
-o'	40	2	256	oacute
-o^	40	2	256	ocircumflex
-o~	40	2	256	otilde
-o"	40	2	256	odieresis
--:	52	0	256	divide
+c,	34	1	ccedilla
+e`	34	2	egrave
+e'	34	2	eacute
+e^	34	2	ecircumflex
+e"	34	2	edieresis
+i`	24	2	igrave
+i'	24	2	iacute
+i^	24	2	icircumflex
+i"	24	2	idieresis
+d-	40	2	eth
+n~	46	2	ntilde
+o`	40	2	ograve
+o'	40	2	oacute
+o^	40	2	ocircumflex
+o~	40	2	otilde
+o"	40	2	odieresis
+-:	52	0	divide
 o/	44	3	249
-u`	46	2	256	ugrave
-u'	46	2	256	uacute
-u^	46	2	256	ucircumflex
-u"	46	2	256	udieresis
-y'	40	3	256	yacute
-th	44	3	256	thorn
-y"	40	3	256	ydieresis
+u`	46	2	ugrave
+u'	46	2	uacute
+u^	46	2	ucircumflex
+u"	46	2	udieresis
+y'	40	3	yacute
+th	44	3	thorn
+y"	40	3	ydieresis
 ^a	34	2	195
 ~a	44	2	196
 Ua	44	2	198
@@ -218,3 +218,5 @@ oa	30	2	202
 "a	40	2	205
 Ca	28	1	206
 va	34	2	207
+fi	52	3	174
+fl	52	3	175

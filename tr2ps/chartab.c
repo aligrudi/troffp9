@@ -147,10 +147,9 @@ int readtroffmetric(char *fontname, int trindex)
 	struct charent *cp;
 	char stoken[128];
 	char gname[128];
-	char str[1 << 12];
 	int ntoken;
 	uc_t troffchar, quote;
-	int width, flag, charnum;
+	int width, flag;
 	int specharflag;
 
 	if (debug)
@@ -257,36 +256,23 @@ int readtroffmetric(char *fontname, int trindex)
 		}
 		if (rv < 0)
 			break;
-		if ((rv = ustr_int(ustr, &charnum)) == 0) {
+		if ((rv = ustr_str(ustr, gname, sizeof(gname))) == 0) {
 			errorflg = 1;
 			error(WARNING, "file %s:%d illegal character number token <0x%x> rv=%d\n",
 				filename, line, troffchar, rv);
 		}
+		rv = ustr_eol(ustr);
 		if (rv < 0)
 			break;
-		rv = ustr_line(ustr, str, sizeof(str));
-		/* copy ps glyph name if available */
-		if (*str) {
-			char *s = str;
-			char *e;
-			while (isspace(*s))
-				s++;
-			e = s;
-			while (*e && !isspace(*e))
-				e++;
-			*e = '\0';
-			strcpy(gname, s);
-		}
-
 flush:
 		line++;
 		uc_dec(&troffchar, stoken);
 		if (strcmp(stoken, "---") == 0) {
-			troffchar = charnum;
+			troffchar = isdigit(gname[0]) ? atoi(gname) : 256;
 			stoken[0] = '\0';
 		}
 		cp = findglyph_ins(trindex, troffchar, stoken);
-		cp->charnum = charnum;
+		cp->charnum = isdigit(gname[0]) ? atoi(gname) : 256;
 		cp->troffcharwidth = width;
 		strcpy(cp->name, stoken);
 		strcpy(cp->gname, gname);

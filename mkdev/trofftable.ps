@@ -183,10 +183,11 @@
 				} ifelse
 				(\t) Print curcode GetWidth Print
 				(\t) Print curcode GetAscender Print
-				(\t) Print chcode Print
-				chcode startcomments ge {
+				chcode startcomments lt {
+					(\t) Print chcode Print
+				} {
 					(\t) Print val Print
-				} if
+				} ifelse
 				(\n) Print
 				/lastvalid 1 def
 			}{
