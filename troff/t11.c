@@ -250,8 +250,6 @@ getlig(FILE *fin)	/* pick up ligature list */
 			lig |= LFFI;
 		else if (strcmp(temp, "ffl") == 0)
 			lig |= LFFL;
-		else
-			fprintf(stderr, "illegal ligature %s ignored\n", temp);
 	}
 	return lig;
 }
