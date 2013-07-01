@@ -332,7 +332,9 @@
 .vs 15p
 .ne 4
 .hy 0
+.nf
 .WT
+.fi
 .hy \\n(HY
 .ce 0
 .ul 0
@@ -371,6 +373,7 @@
 .ps \\n(PS
 .ie \\n(VS>=41 .vs \\n(VSu
 .el .vs \\n(VSp
+.nf
 .if t \{\
 .	sp
 .	A1
@@ -463,6 +466,7 @@
 .	if \\n(NA-8 .sp
 .	ns
 .	I9\}
+.fi
 ..
 .	\"AI - authors institution
 .de AI
