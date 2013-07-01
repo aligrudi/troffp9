@@ -1,11 +1,12 @@
 /*
  * refer - a small refer clone
  *
- * Copyright (C) 2011-2012 Ali Gholami Rudi <ali at rudi dot ir>
+ * Copyright (C) 2011-2013 Ali Gholami Rudi <ali at rudi dot ir>
  */
 #include <ctype.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -56,9 +57,8 @@ static int xwrite(int fd, char *buf, int len)
 /* read a single refer record */
 static char *db_ref(char *s, struct ref *ref)
 {
-	char *beg, *end;
+	char *end;
 	while (*s != '\n') {
-		beg = s;
 		end = strchr(s, '\n');
 		if (!end)
 			return strchr(s, '\0');
@@ -213,7 +213,7 @@ static void refer_cite(int fd, char *b, char *e)
 	/* read characters after .[ */
 	cut(msg, b + 2, "", "\n");
 	/* sort references for cleaner reference intervals */
-	qsort(id, nid, sizeof(id[0]), intcmp);
+	qsort(id, nid, sizeof(id[0]), (void *) intcmp);
 	i = 0;
 	while (i < nid) {
 		int beg = i++;
@@ -256,7 +256,7 @@ static void refer(int fd, char *s)
 				e = strchr(e + 1, '\n');
 			if (!e)
 				break;
-			xwrite(fd, l, r - l);
+			xwrite(fd, l, r - l + 1);
 			s = strchr(e + 1, '\n');
 			l = s;
 			refer_cite(fd, r + 1, e + 1);
