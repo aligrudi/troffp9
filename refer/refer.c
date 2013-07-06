@@ -131,7 +131,7 @@ static void ins_ref(int fd, struct ref *ref, int id)
 		if (strchr(fields_flag, j))
 			s += sprintf(s, ".nr [%c 1\n", j);
 	}
-	s += sprintf(s, ".][ %d %s", kind, kinds[kind]);
+	s += sprintf(s, ".][ %d %s\n", kind, kinds[kind]);
 	xwrite(fd, list, s - list);
 }
 
@@ -139,13 +139,11 @@ static void ins_ref(int fd, struct ref *ref, int id)
 static void ins_all(int fd)
 {
 	int i;
-	char *beg = "\n.]<\n";
+	char *beg = ".]<\n";
 	char *end = ".]>";
 	xwrite(fd, beg, strlen(beg));
-	for (i = 1; i < nadded; i++) {
+	for (i = 1; i < nadded; i++)
 		ins_ref(fd, added[i], i);
-		write(fd, "\n", 1);
-	}
 	xwrite(fd, end, strlen(end));
 }
 
@@ -231,13 +229,11 @@ static void refer_cite(int fd, char *b, char *e)
 	/* read characters after .] */
 	cut(msg + strlen(msg), e + 2, "", "\n");
 	xwrite(fd, msg, strlen(msg));
+	xwrite(fd, "\n", 1);
 	/* insert the reference if not accumulating them */
-	if (!accumulate) {
-		for (i = 0; i < nid; i++) {
-			write(fd, "\n", 1);
+	if (!accumulate)
+		for (i = 0; i < nid; i++)
 			ins_ref(fd, added[id[i]], ++inserted);
-		}
-	}
 }
 
 /* read the input s and write refer output to fd */
@@ -258,7 +254,7 @@ static void refer(int fd, char *s)
 				break;
 			xwrite(fd, l, r - l + 1);
 			s = strchr(e + 1, '\n');
-			l = s;
+			l = s + 1;
 			refer_cite(fd, r + 1, e + 1);
 		}
 		s = r + 1;
