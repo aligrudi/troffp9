@@ -904,7 +904,6 @@ Computing Science Technical Report No. \\*(MN
 .if t .if \\n(TB=0 .wh -1p CM
 .if \\n(TB \{\&\c
 '	bp
-.	NP
 .	ch CM 160\}
 ..
 .	\"NP new page
@@ -1416,7 +1415,7 @@ ABSTRACT
 'ce 0
 .nr IA \\n(IP
 .nr IB \\n(.i
-.ev1
+.ev 1
 .ll \\n(FLu
 .da FF
 .br
@@ -1447,7 +1446,7 @@ ABSTRACT
 ..
 .\"	First page footer.
 .de FS
-.ev1
+.ev 1
 .br
 .ll \\n(FLu
 .da FG
@@ -1481,7 +1480,7 @@ ABSTRACT
 ..
 .de XF
 .if \\n(nlu+1v>(\\n(.pu-\\n(FMu) .ch FX \\n(nlu+1.9v
-.ev1
+.ev 1
 .nf
 .ls 1
 .FF
@@ -1494,7 +1493,7 @@ ABSTRACT
 .ev
 ..
 .de FL
-.ev1
+.ev 1
 .nr FL \\$1n
 .ll \\$1
 .ev
