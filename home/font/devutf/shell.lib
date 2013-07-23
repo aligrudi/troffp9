@@ -301,9 +301,19 @@ StandardCharset() {
 		(va)	/caron			% devpost accent
 		(fi)	/fi
 		(fl)	/fl
-		(ff)	/ff
-		(Fi)	/ffi
-		(Fl)	/ffl
+		(fb)	/f_b
+		(fh)	/f_h
+		(fi)	/f_i
+		(fj)	/f_j
+		(fl)	/f_l
+		(fk)	/f_k
+		(ff)	/f_f
+		(ffi)	/f_f_i
+		(ffj)	/f_f_j
+		(ffl)	/f_f_l
+		(fft)	/f_f_t
+		(ft)	/f_t
+		(Th)	/T_h
 	//End of StandardCharset
 }
 
@@ -598,6 +608,7 @@ SymbolCharset() {
 		(pp)		/perpendicular
 		(ul)		/underscore
 		(_)		(")			% synonym
+		(rn)		/radicalex
 		(*a)		/alpha
 		(α)	(")
 		(*b)		/beta
@@ -724,8 +735,12 @@ SymbolCharset() {
 		(TM)		/trademarksans
 		(su)		/summation
 		(LT)		/parenlefttp
+		(br)		/parenleftex
+		(LX)		(")
 		(LB)		/parenleftbt
+		(lc)		/bracketlefttp
 		(lx)		/bracketleftex
+		(lf)		/bracketleftbt
 		(lt)		/bracelefttp
 		(lk)		/braceleftmid
 		(lb)		/braceleftbt
@@ -739,18 +754,13 @@ SymbolCharset() {
 		(RT)		/parenrighttp
 		(RX)		/parenrightex
 		(RB)		/parenrightbt
+		(rc)		/bracketrighttp
 		(rx)		/bracketrightex
+		(rf)		/bracketrightbt
 		(rt)		/bracerighttp
 		(rk)		/bracerightmid
 		(rb)		/bracerightbt
 		(~=)		(55	0	1)	% charlib
-		(br)		(38	2	1)	% charlib
-		(LX)		(")			% charlib synonym
-		(rn)		(50	2	1)	% charlib
-		(rc)		(38	2	1)	% charlib
-		(rf)		(38	2	1)	% charlib
-		(lc)		(38	2	1)	% charlib
-		(lf)		(38	2	1)	% charlib
 	//End of SymbolCharset
 }
 
@@ -825,6 +835,7 @@ Proportional() {
 	echo "(fontname $2\\n) Print"
 	echo "/$1 NamedInPrologue"
 	echo "(spacewidth ) Print 32 GetWidth Print (\n) Print"
+	echo "(ligatures fh fi fj fk fl ff ffi ffj ffl fft ft Th 0\\n) Print"
 	echo "(charset\\n) Print"
 	echo "BuildFontCharset"
 }
