@@ -13,12 +13,12 @@ package.  Then compile everything:
 
   $ for t in troff tr2ps eqn tbl pic grap refer; do cd $t; make; cd ..; done
 
-Next, you may want to copy the binaries to a directory in your $PATH.
+You may copy the binaries to a directory in your $PATH.
 
-Note that the included troff font description files are smaller than
-the ones included in Plan9 and are generated using mkdev tool
-(included in this package).  But you can use the ones from Plan9
-too.
+Then, the output device description file should be generated.  To do
+so, change to the mkdev directory and execute mkdev.sh shell script.
+This should create the device description file and font description
+files of the devutf output device.
 
 TR2PS CHANGES
 =============
