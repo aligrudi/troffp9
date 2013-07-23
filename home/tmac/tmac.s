@@ -1,4 +1,3 @@
-.lg 0
 .ds sd \*(.P/tmac
 .\"	RT -  reset everything to normal state
 .de RT
