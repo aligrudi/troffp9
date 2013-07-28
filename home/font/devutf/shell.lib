@@ -193,7 +193,7 @@ StandardCharset() {
 		(cr)	(")			% devpost synonym
 		(Y-)	/yen
 		(yn)	(")			% devpost synonym
-		(||)	/brokenbar		% missing
+		(||)	/brokenbar
 		(so)	/section
 		(sc)	(")			% devpost synonym
 		("")	/dieresis
@@ -208,91 +208,200 @@ StandardCharset() {
 		(rg)	(")			% devpost synonym
 		(-^)	/macron
 		(-a)	(")			% devpost synonym
-		(0^)	/degree			% missing
-		(+-)	/plusminus		% missing
-		(2^)	/twosuperior		% missing
-		(3^)	/threesuperior		% missing
+		(0^)	/degree
+		(+-)	/plusminus
+		(2^)	/twosuperior
+		(3^)	/threesuperior
 		(\\')	/acute
 		(aa)	(")			% devpost synonym
-		(/u)	/mu			% missing
+		(/u)	/mu
 		(P!)	/paragraph
 		(pg)	(")			% devpost synonym
 		(.^)	/periodcentered
 		(,,)	/cedilla
 		(,a)	(")			% devpost synonym
-		(1^)	/onesuperior		% missing
+		(1^)	/onesuperior
 		(o_)	/ordmasculine
 		(>>)	/guillemotright
-		(14)	/onequarter		% missing
-		(12)	/onehalf		% missing
-		(34)	/threequarters		% missing
+		(14)	/onequarter
+		(12)	/onehalf
+		(34)	/threequarters
 		(??)	/questiondown
 		(A`)	/Agrave
+		(À)	(")			% unicode alias
 		(A')	/Aacute
+		(Á)	(")			% unicode alias
 		(A^)	/Acircumflex
+		(Â)	(")			% unicode alias
 		(A~)	/Atilde
-		(A")	/Adieresis
+		(Ã)	(")			% unicode alias
+		(A:)	/Adieresis
+		(A")	(")
+		(Ä)	(")			% unicode alias
 		(A*)	/Aring
+		(Å)	(")			% unicode alias
 		(AE)	/AE
+		(Æ)	(")			% unicode alias
 		(C,)	/Ccedilla
+		(Ç)	(")			% unicode alias
+		(C<)	/Ccaron
+		(Č)	(")			% unicode alias
 		(E`)	/Egrave
+		(È)	(")			% unicode alias
 		(E')	/Eacute
+		(É)	(")			% unicode alias
 		(E^)	/Ecircumflex
-		(E")	/Edieresis
+		(Ê)	(")			% unicode alias
+		(E:)	/Edieresis
+		(E")	(")
+		(Ë)	(")			% unicode alias
 		(I`)	/Igrave
+		(Ì)	(")			% unicode alias
 		(I')	/Iacute
+		(Í)	(")			% unicode alias
 		(I^)	/Icircumflex
-		(I")	/Idieresis
-		(D-)	/Eth			% missing
+		(Î)	(")			% unicode alias
+		(I:)	/Idieresis
+		(I")	(")
+		(Ï)	(")			% unicode alias
+		(D-)	/Eth
+		(Ð)	(")			% unicode alias
+		(D<)	/Dcaron
+		(Ď)	(")			% unicode alias
 		(N~)	/Ntilde
+		(Ñ)	(")			% unicode alias
 		(O`)	/Ograve
+		(Ò)	(")			% unicode alias
 		(O')	/Oacute
+		(Ó)	(")			% unicode alias
 		(O^)	/Ocircumflex
+		(Ô)	(")			% unicode alias
 		(O~)	/Otilde
-		(O")	/Odieresis
-		(xx)	/multiply		% missing
+		(Õ)	(")			% unicode alias
+		(O:)	/Odieresis
+		(Ö)	(")			% unicode alias
+		(O")	/Ohungarumlaut
+		(Ő)	(")			% unicode alias
+		(xx)	/multiply
 		(O/)	/Oslash
+		(Ø)	(")			% unicode alias
+		(R<)	/Rcaron
+		(Ř)	(")			% unicode alias
+		(S<)	/Scaron
+		(Š)	(")			% unicode alias
+		(T<)	/Tcaron
+		(Ť)	(")			% unicode alias
 		(U`)	/Ugrave
+		(Ù)	(")			% unicode alias
 		(U')	/Uacute
+		(Ú)	(")			% unicode alias
 		(U^)	/Ucircumflex
-		(U")	/Udieresis
-		(Y')	/Yacute			% missing
-		(TH)	/Thorn			% missing
+		(Û)	(")			% unicode alias
+		(U:)	/Udieresis
+		(Ü)	(")			% unicode alias
+		(U")	/Uhungarumlaut
+		(Ű)	(")			% unicode alias
+		(U0)	/Uring
+		(Ů)	(")			% unicode alias
+		(Y')	/Yacute
+		(Ý)	(")			% unicode alias
+		(Z<)	/Zcaron
+		(Ž)	(")			% unicode alias
+		(TH)	/Thorn
+		(Þ)	(")			% unicode alias
 		(ss)	/germandbls
+		(ß)	(")			% unicode alias
 		(a`)	/agrave
+		(à)	(")			% unicode alias
 		(a')	/aacute
+		(á)	(")			% unicode alias
 		(a^)	/acircumflex
+		(â)	(")			% unicode alias
 		(a~)	/atilde
-		(a")	/adieresis
+		(ã)	(")			% unicode alias
+		(a:)	/adieresis
+		(a")	(")
+		(ä)	(")			% unicode alias
 		(a*)	/aring
+		(å)	(")			% unicode alias
 		(ae)	/ae
+		(æ)	(")			% unicode alias
 		(c,)	/ccedilla
+		(ç)	(")			% unicode alias
+		(c<)	/ccaron
+		(č)	(")			% unicode alias
+		(d<)	/dcaron
+		(ď)	(")			% unicode alias
 		(e`)	/egrave
+		(è)	(")			% unicode alias
 		(e')	/eacute
+		(é)	(")			% unicode alias
 		(e^)	/ecircumflex
-		(e")	/edieresis
+		(ê)	(")			% unicode alias
+		(e:)	/edieresis
+		(e")	(")
+		(ë)	(")			% unicode alias
+		(e<)	/ecaron
+		(ě)	(")			% unicode alias
 		(i`)	/igrave
+		(ì)	(")			% unicode alias
 		(i')	/iacute
+		(í)	(")			% unicode alias
 		(i^)	/icircumflex
+		(î)	(")			% unicode alias
 		(i")	/idieresis
-		(d-)	/eth			% missing
+		(d-)	/eth
+		(ð)	(")			% unicode alias
 		(n~)	/ntilde
+		(ñ)	(")			% unicode alias
+		(n<)	/ncaron
+		(ň)	(")			% unicode alias
 		(o`)	/ograve
+		(ò)	(")			% unicode alias
 		(o')	/oacute
+		(ó)	(")			% unicode alias
 		(o^)	/ocircumflex
+		(ô)	(")			% unicode alias
 		(o~)	/otilde
-		(o")	/odieresis
-		(-:)	/divide			% missing
+		(õ)	(")			% unicode alias
+		(o:)	/odieresis
+		(ö)	(")			% unicode alias
+		(o")	/ohungarumlaut
+		(ő)	(")			% unicode alias
+		(-:)	/divide
+		(÷)	(")			% unicode alias
 		(o/)	/oslash
+		(ø)	(")			% unicode alias
+		(r<)	/rcaron
+		(ř)	(")			% unicode alias
+		(s<)	/scaron
+		(š)	(")			% unicode alias
+		(t<)	/tcaron
+		(ť)	(")			% unicode alias
 		(u`)	/ugrave
+		(ù)	(")			% unicode alias
 		(u')	/uacute
+		(ú)	(")			% unicode alias
 		(u^)	/ucircumflex
-		(u")	/udieresis
-		(y')	/yacute			% missing
-		(th)	/thorn			% missing
+		(û)	(")			% unicode alias
+		(u:)	/udieresis
+		(ü)	(")			% unicode alias
+		(u")	/uhungarumlaut
+		(ű)	(")			% unicode alias
+		(u0)	/uring
+		(ů)	(")			% unicode alias
+		(y')	/yacute
+		(ý)	(")			% unicode alias
+		(z<)	/zcaron
+		(ž)	(")			% unicode alias
+		(th)	/thorn
+		(þ)	(")			% unicode alias
 		(y")	/ydieresis
+		(ÿ)	(")			% unicode alias
 		(^a)	/circumflex		% devpost accent
+		(â)	(")			% unicode alias
 		(~a)	/tilde			% devpost accent
+		(ã)	(")			% unicode alias
 		(Ua)	/breve			% devpost accent
 		(.a)	/dotaccent		% devpost accent
 		(oa)	/ring			% devpost accent
