@@ -56,7 +56,7 @@
 '''\" initialization
 '''\"
 '''\"		get ms if not loaded
-.if !\n(PS .so \*(.P/tmac/tmac.s
+.if !\n(PS .so \*(.P/tmac.s
 .	\" to foil ms
 .if !'\*(d)'' \{\
 .	tm You're trying to load the coversheet macros twice - havoc will result
@@ -251,7 +251,7 @@
 .di
 .ft
 .sy echo \\$2 >/tmp/tt\\n($$
-.sy sed -f \*(.P/tmac/name.sed /tmp/tt\\n($$ >/tmp/tx\\n($$
+.sy sed -f \*(.P/name.sed /tmp/tt\\n($$ >/tmp/tx\\n($$
 .so /tmp/tx\\n($$
 .sy rm /tmp/tx\\n($$ /tmp/tt\\n($$
 .if \\$1<2 .ds T1 \\*(T1-gre
@@ -484,8 +484,8 @@
 .ie \\ne>0 \{\
 .	da ZC				\" ZC = mm(cA)
 .	ds y( \\$1
-.	ie '\\$1'y' .so \*(.P/tmac/complet.1127
-.	el .if  !'\\$1'' .so \*(.P/tmac/complet.\\*(y(
+.	ie '\\$1'y' .so \*(.P/complet.1127
+.	el .if  !'\\$1'' .so \*(.P/complet.\\*(y(
 .	dt \\ne OC \}
 .el .da ZC
 ..
@@ -511,8 +511,8 @@
 .ie \\nh>0 \{\
 .	da ZS				\" ZS = mm(dA)
 .	ds y( \\$1
-.	ie '\\$1'y' .so \*(.P/tmac/cover.1127
-.	el .if !'\\$1'' .so \*(.P/tmac/cover.\\*(y(
+.	ie '\\$1'y' .so \*(.P/cover.1127
+.	el .if !'\\$1'' .so \*(.P/cover.\\*(y(
 .	dt \\nh OV \}
 .el .da ZD
 ..
@@ -1056,8 +1056,8 @@ Internal Technical Document Service
 .nr MG \\n(wp
 .nr NA \\nu
 .if '\\n(ST'1' \{\
-'''.so \*(.P/tmac/tmac.rscover XXX
-.so \*(.P/lib/tmac/tmac.rscover
+'''.so \*(.P/tmac.rscover XXX
+.so \*(.P/tmac.rscover
 . \" a line for troff to eat
 .S1 \}
 .ll 6i

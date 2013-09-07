@@ -1,4 +1,4 @@
-.so \*(.P/tmac/tmac.an
+.so \*(.P/tmac.an
 .de }H
 ..
 .de }F

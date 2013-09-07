@@ -9,7 +9,7 @@
 
 /* Site dependent definitions */
 
-#define TMACDIR		TBASE "/tmac/tmac."
+#define TMACDIR		TBASE "/tmac"
 #define FONTDIR		TBASE "/font"
 #define NTERMDIR	TBASE "/term/tab."
 #define TEXHYPHENS	TBASE "/hyphen/hyphen.tex"

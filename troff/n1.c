@@ -225,7 +225,7 @@ void init2(void)
 	copyf = raw = 0;
 	sprintf(buf, ".ds .T %s\n", devname);
 	cpushback(buf);
-	sprintf(buf, ".ds .P %s\n", TBASE);
+	sprintf(buf, ".ds .P %s\n", TMACDIR);
 	cpushback(buf);
 	numtabp[CD].val = -1;	/* compensation */
 	nx = mflg;

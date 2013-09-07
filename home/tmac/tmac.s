@@ -1,4 +1,4 @@
-.ds sd \*(.P/tmac
+.ds sd \*(.P
 .\"	RT -  reset everything to normal state
 .de RT
 .if \\n(CS \{\

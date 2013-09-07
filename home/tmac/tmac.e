@@ -918,7 +918,7 @@
 .nr ii 5n
 .nr $m 1
 .nr $s 4n
-.ds || \*(.P/tmac/me
+.ds || \*(.P/me
 .bd S B 3
 .ds [ \u\x'-0.25v'
 .ds ] \d
