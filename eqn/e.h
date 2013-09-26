@@ -3,7 +3,7 @@
 #include <string.h>
 
 enum charclass {
-	OTHER, OLET, ILET, DIG, LPAR, RPAR, SLASH, PLUS, ILETF, ILETJ, VBAR,
+	OTHER, OLET, ILET, DIG, LPAR, RPAR, SLASH, PLUS, ILETF, ILETJ, VBAR, COMMA,
 	NONE, LAST
 };
 extern int class[LAST][LAST];

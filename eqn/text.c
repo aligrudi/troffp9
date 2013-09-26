@@ -16,18 +16,19 @@ int	nclass;		/* class of next character */
 
 int class[LAST][LAST] ={	/* guesswork, tuned to times roman postscript */
 
-	/*OT OL IL DG LP RP SL PL IF IJ VB */
-/*OT*/	{ 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0 },		/* OTHER */
-/*OL*/	{ 1, 0, 1, 1, 1, 1, 1, 2, 2, 2, 0 },		/* OLET */
-/*IL*/	{ 1, 1, 0, 1, 1, 1, 1, 3, 2, 1, 0 },		/* ILET */
-/*DG*/	{ 1, 1, 1, 0, 1, 1, 1, 2, 2, 2, 0 },		/* DIG */
-/*LP*/	{ 1, 1, 1, 1, 1, 2, 1, 2, 3, 3, 0 },		/* LPAR */
-/*RP*/	{ 2, 2, 2, 1, 1, 1, 1, 2, 3, 3, 0 },		/* RPAR */
-/*SL*/	{ 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 0 },		/* SLASH */
-/*PL*/	{ 2, 2, 2, 2, 2, 2, 3, 2, 3, 2, 0 },		/* PLUS */
-/*IF*/	{ 3, 3, 1, 2, 2, 3, 2, 3, 0, 1, 1 },		/* ILETF */
-/*IJ*/	{ 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0 },		/* ILETJ */
-/*VB*/	{ 4, 4, 4, 4, 4, 4, 4, 4, 5, 4, 1 },		/* VBAR */
+	/*OT OL IL DG LP RP SL PL IF IJ VB CM */
+/*OT*/	{ 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0 },		/* OTHER */
+/*OL*/	{ 1, 0, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0 },		/* OLET */
+/*IL*/	{ 1, 1, 0, 1, 1, 1, 1, 3, 2, 1, 0, 0 },		/* ILET */
+/*DG*/	{ 1, 1, 1, 0, 1, 1, 1, 2, 2, 2, 0, 0 },		/* DIG */
+/*LP*/	{ 1, 1, 1, 1, 1, 2, 1, 2, 3, 3, 0, 0 },		/* LPAR */
+/*RP*/	{ 2, 2, 2, 1, 1, 1, 1, 2, 3, 3, 0, 0 },		/* RPAR */
+/*SL*/	{ 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 0 },		/* SLASH */
+/*PL*/	{ 2, 2, 2, 2, 2, 2, 3, 2, 3, 2, 0, 0 },		/* PLUS */
+/*IF*/	{ 3, 3, 1, 2, 2, 3, 2, 3, 0, 1, 1, 0 },		/* ILETF */
+/*IJ*/	{ 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0, 0 },		/* ILETJ */
+/*VB*/	{ 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1 },		/* VBAR */
+/*CM*/	{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },		/* COMMA */
 
 };
 
@@ -197,7 +198,7 @@ trans(int c, char *p1)
 		roman(c);
 		return f;
 	case ',':
-		shim(pclass, nclass = OTHER);
+		shim(pclass, nclass = COMMA);
 		roman(c);
 		return f;
 	case '.':
@@ -208,7 +209,7 @@ trans(int c, char *p1)
 		return f;
 	case '|':		/* postscript needs help with default width! */
 		shim(pclass, nclass = VBAR);
-		sadd("\\v'.17m'\\z|\\v'-.17m'\\|");	/* and height */
+		sadd("|");	/* and height */
 		return f;
 	case '=':
 		shim(pclass, nclass = PLUS);
