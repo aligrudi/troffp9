@@ -109,6 +109,10 @@ drawvert(int start, int end, int c, int lwid)
 		if (linsize)
 			fprintf(tabout, "\\v'-\\n(%dp/6u'", LSIZE);
 		fprintf(tabout, "\\h'-\\n(#~u'");	 /* adjustment for T450 nroff boxes */
+		/* adjustment to make vertical and horizontal lines meet properly */
+		fprintf(tabout, "\\h'-\\n(%dp*7u/100u'", LSIZE);
+		fprintf(tabout, "\\v'\\n(%dp*2u/100u'", LSIZE);
+
 		fprintf(tabout, "\\L'|\\n(#%cu-%s", linestop[start] + 'a' - 1,
 		      vm == 'v' ? "1v" : "\\n(35u");
 		if (ext)
