@@ -22,8 +22,8 @@ char *gets1(char *s, int size)
 	}
 	nbl = strlen(s);
 	s[nbl - 1] = '\0';	/* remove the newline */
-	s += nbl - 1;
-	for (nbl = 0; *s == '\\' && s > ns; s--)
+	s += nbl - 2;
+	for (nbl = 0; s > ns && *s == '\\'; s--)
 		nbl++;
 	if (linstart && nbl % 2)	/* fold escaped nl if in table */
 		gets1(s + 1, size - (s - ns));
