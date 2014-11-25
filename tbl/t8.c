@@ -320,7 +320,8 @@ funnies(int stl, int lin)
 		}
 		fprintf(tabout, ".in +\\n(%du\n", SIND);
 		fn = font[c][stynum[stl]];
-		putfont(fn);
+		if (*fn)
+			fprintf(tabout, ".ft %s\n", fn);
 		pl = prev(stl);
 		if (stl > 0 && pl >= 0 && vspen(table[pl][c].col)) {
 			fprintf(tabout, ".sp |\\n(^%cu\n", 'a' + c);
@@ -335,8 +336,8 @@ funnies(int stl, int lin)
 		}
 		fprintf(tabout, ".%c+\n", s);
 		fprintf(tabout, ".in -\\n(%du\n", SIND);
-		if (*fn > 0) 
-			putfont("P");
+		if (*fn)
+			fprintf(tabout, ".ft P\n");
 		fprintf(tabout, ".mk %d\n", S2);
 		fprintf(tabout, ".if \\n(%d>\\n(%d .nr %d \\n(%d\n", S2, S1, S1, S2);
 	}
