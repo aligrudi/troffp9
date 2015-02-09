@@ -254,7 +254,10 @@ double lastgray = 0;
 void fillstart(double v)	/* this works only for postscript, obviously. */
 {				/* uses drechsler's dpost conventions... */
 	hvflush();
-	printf("\\X'BeginObject %g setgray'\n", v);
+	if (v >= 0 && v <= 1)
+		printf("\\X'BeginObject %g setgray'\n", v);
+	else
+		printf("\\X'BeginObject'\n");
 	lastgray = v;
 	flyback();
 }
@@ -262,9 +265,13 @@ void fillstart(double v)	/* this works only for postscript, obviously. */
 void fillend(int vis, int fill)
 {
 	hvflush();
-	printf("\\X'EndObject gsave eofill grestore %g setgray %s'\n",
-		!vis ? lastgray : 0.0,
-		vis ? "stroke" : "");
+	if (lastgray >= 0 && lastgray <= 1) {
+		printf("\\X'EndObject gsave eofill grestore %g setgray %s'\n",
+			!vis ? lastgray : 0.0,
+			vis ? "stroke" : "");
+	} else {
+		printf("\\X'EndObject gsave eofill grestore %s'\n", vis ? "stroke" : "");
+	}
 	/* for dashed: [50] 0 setdash just before stroke. */
 	lastgray = 0;
 	flyback();
