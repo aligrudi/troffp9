@@ -273,7 +273,7 @@ puttext(char *s, char *fn, char *size)
 		putsize(size);
 		fprintf(tabout, "%s", s);
 		if (*fn > 0) 
-			fprintf(tabout, "\\f\\n(%2d", S1);
+			fprintf(tabout, "\\f(\\n(%2d", S1);
 		if (size != 0) 
 			putsize("0");
 	}
