@@ -98,8 +98,10 @@ putline(int i, int nl)
 		fprintf(tabout, ".nr 35 \\n(.vu\n");
 	} else
 		fprintf(tabout, ".nr 35 1m\n");
-	if (chfont)
+	if (chfont) {
 		fprintf(tabout, ".nr %2d \\n(.f\n", S1);
+		fprintf(tabout, ".af %2d 01\n", S1);
+	}
 	fprintf(tabout, "\\&");
 	vct = 0;
 	for (c = 0; c < ncol; c++) {
