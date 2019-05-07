@@ -119,7 +119,7 @@ thish(int i, int c)
 		return(1);
 	if (vspen(s)) 
 		return(1);
-	if (t = barent( s))
+	if ((t = barent( s)))
 		return(t);
 	return(0);
 }

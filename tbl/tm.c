@@ -37,7 +37,7 @@ maknew(char *str)
 		exlim = exstore + MAXCHS;
 	}
 	q = exstore;
-	while (*exstore++ = *str++)
+	while ((*exstore++ = *str++))
 		;
 	*p = 0;
 	return(q);
@@ -50,7 +50,7 @@ ineqn (char *s, char *p)
 				/* true if s is in a eqn within p */
 	int	ineq = 0, c;
 
-	while (c = *p) {
+	while ((c = *p)) {
 		if (s == p)
 			return(ineq);
 		p++;

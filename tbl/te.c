@@ -1,5 +1,6 @@
 /* te.c: error message control, input line count */
 #include <string.h>
+#include <stdlib.h>
 #include "t.h"
 
 void error(char *s)
