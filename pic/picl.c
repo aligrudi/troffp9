@@ -56,7 +56,7 @@ int	yylook(void);
 int	yywrap(void);
 
 #define	CADD	cbuf[clen++]=yytext[0]; \
-		if (clen>=CBUFLEN-1) { ERROR "string too long", cbuf WARNING; BEGIN A; }
+		if (clen>=CBUFLEN-1) { error("string too long", cbuf); BEGIN A; }
 #define	CBUFLEN	500
 char	cbuf[CBUFLEN];
 int	c, clen, cflag, delim;
@@ -103,7 +103,7 @@ case 7:
 { return(yylval.i = yytext[0]); }
 break;
 case 8:
-{ if (curfile == infile) ERROR ".PS found inside .PS/.PE" WARNING; }
+{ if (curfile == infile) error(".PS found inside .PS/.PE"); }
 break;
 case 9:
 { if (curfile == infile) {
@@ -535,7 +535,7 @@ case 135:
 	{ cbuf[clen]=0; yylval.p = tostring(cbuf); BEGIN A; return(TEXT); }
 break;
 case 136:
-	{ cbuf[clen]=0; ERROR "missing quote in string \"%s\"", cbuf WARNING;
+	{ cbuf[clen]=0; error("missing quote in string \"%s\"", cbuf);
 				BEGIN A; return(ST); }
 break;
 case 137:

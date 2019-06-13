@@ -10,9 +10,8 @@
 extern	void	yyerror(char *);
 
 extern	char	errbuf[200];
-#define	ERROR	sprintf(errbuf,
-#define	FATAL	), yyerror(errbuf), exit(1)
-#define	WARNING	), yyerror(errbuf)
+void error(char *s, ...);
+void fatal(char *s, ...);
 
 #define	DEFAULT	0
 

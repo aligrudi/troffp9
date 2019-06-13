@@ -20,7 +20,7 @@ obj *leftthing(int c)	/* called for {... or [... */
 
 	if (c == '[') {
 		if (nstack >= NBRACK)
-			ERROR "[...] nested too deep" FATAL;
+			fatal("[...] nested too deep");
 		stack[nstack].p_x = curx;
 		stack[nstack].p_y = cury;
 		stack[nstack].p_hvmode = hvmode;
@@ -38,7 +38,7 @@ obj *leftthing(int c)	/* called for {... or [... */
 			fprintf(stderr, "nobjs wrong%d %d\n", p->o_nobj, nobj);
 	} else {
 		if (nbstack >= NBRACK)
-			ERROR "{...} nested too deep" FATAL;
+			fatal("{...} nested too deep");
 		bracestack[nbstack].p_x = curx;
 		bracestack[nbstack].p_y = cury;
 		bracestack[nbstack].p_hvmode = hvmode;

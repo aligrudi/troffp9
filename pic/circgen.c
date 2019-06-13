@@ -103,7 +103,7 @@ obj *circgen(int type)
 	p->o_val[0] = rad[t] = r;
 	p->o_val[1] = rad2[t] = r2;
 	if (r <= 0 || r2 <= 0) {
-		ERROR "%s has invalid radius %g\n", (type==CIRCLE) ? "circle" : "ellipse", r<r2 ? r : r2 WARNING;
+		error("%s has invalid radius %g\n", (type==CIRCLE) ? "circle" : "ellipse", r<r2 ? r : r2);
 	}
 	p->o_attr = battr;
 	p->o_ddval = ddval;

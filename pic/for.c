@@ -25,7 +25,7 @@ void forloop(char *var, double from, double to, int op,
 	dprintf("# for %s from %g to %g by %c %g \n",
 		var, from, to, op, by);
 	if (++forp >= forstk+10)
-		ERROR "for loop nested too deep" FATAL;
+		fatal("for loop nested too deep");
 	forp->var = var;
 	forp->to = to;
 	forp->op = op;
@@ -42,7 +42,7 @@ void nextfor(void)	/* do one iteration of a for loop */
 	if (getfval(forp->var) > SLOP * forp->to) {	/* loop is done */
 		free(forp->str);
 		if (--forp < forstk)
-			ERROR "forstk popped too far" FATAL;
+			fatal("forstk popped too far");
 	} else {		/* another iteration */
 		pushsrc(String, "\nEndfor\n");
 		pushsrc(String, forp->str);

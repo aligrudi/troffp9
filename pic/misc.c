@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -28,7 +29,7 @@ curdir(void)	/* convert current dir (hvmode) to RIGHT, LEFT, etc. */
 	case U_DIR:	return UP;
 	case D_DIR:	return DOWN;
 	}
-	ERROR "can't happen curdir" FATAL;
+	fatal("can't happen curdir");
 	return 0;
 }
 
@@ -76,7 +77,7 @@ double getcomp(obj *p, int t)	/* return component of a position */
 			return p->o_val[0];
 		}
 	}
-	ERROR "you asked for a weird dimension or position" WARNING;
+	error("you asked for a weird dimension or position");
 	return 0;
 }
 
@@ -169,7 +170,7 @@ char *tostring(char *s)
 
 	p = malloc(strlen(s)+1);
 	if (p == NULL)
-		ERROR "out of space in tostring on %s", s FATAL;
+		fatal("out of space in tostring on %s", s);
 	strcpy(p, s);
 	return(p);
 }
@@ -208,7 +209,7 @@ int whatpos(obj *p, int corner, double *px, double *py)	/* what is the position 
 	double x, y, x1, y1;
 
 	if (p == NULL)
-		ERROR "null object" FATAL;
+		fatal("null object");
 	dprintf("whatpos %o %d %d\n", p, p->o_type, corner);
 	x = p->o_x;
 	y = p->o_y;
@@ -322,7 +323,7 @@ obj *getlast(int n, int t)	/* find n-th previous occurrence of type t */
 		dprintf("got a last of x,y= %g,%g\n", p->o_x, p->o_y);
 		return(p);
 	}
-	ERROR "there is no %dth last", n FATAL;
+	fatal("there is no %dth last", n);
 	return(NULL);
 }
 
@@ -345,7 +346,7 @@ obj *getfirst(int n, int t)	/* find n-th occurrence of type t */
 		dprintf("got a first of x,y= %g,%g\n", p->o_x, p->o_y);
 		return(p);
 	}
-	ERROR "there is no %dth ", n FATAL;
+	fatal("there is no %dth ", n);
 	return(NULL);
 }
 
@@ -371,7 +372,7 @@ YYSTYPE getblk(obj *p, char *s)	/* find union type for s in p */
 	struct symtab *stp;
 
 	if (p->o_type != BLOCK) {
-		ERROR ".%s is not in that block", s WARNING;
+		error(".%s is not in that block", s);
 		return(bug);
 	}
 	for (stp = p->o_symtab; stp != NULL; stp = stp->s_next)
@@ -380,7 +381,7 @@ YYSTYPE getblk(obj *p, char *s)	/* find union type for s in p */
 				s, (stp->s_val.o)->o_x, (stp->s_val.o)->o_y);
 			return(stp->s_val);
 		}
-	ERROR "there is no .%s in that []", s WARNING;
+	error("there is no .%s in that []", s);
 	return(bug);
 }
 
@@ -408,7 +409,7 @@ obj *makenode(int type, int n)
 
 	p = (obj *) calloc(1, sizeof(obj) + (n-1)*sizeof(ofloat));
 	if (p == NULL)
-		ERROR "out of space in makenode" FATAL;
+		fatal("out of space in makenode");
 	p->o_type = type;
 	p->o_count = n;
 	p->o_nobj = nobj;
@@ -435,4 +436,23 @@ void extreme(double x, double y)	/* record max and min x and y values */
 		xmin = x;
 	if (y < ymin)
 		ymin = y;
+}
+
+void error(char *s, ...)
+{
+	va_list ap;
+	va_start(ap, s);
+	vsnprintf(errbuf, sizeof(errbuf), s, ap);
+	va_end(ap);
+	yyerror(errbuf);
+}
+
+void fatal(char *s, ...)
+{
+	va_list ap;
+	va_start(ap, s);
+	vsnprintf(errbuf, sizeof(errbuf), s, ap);
+	va_end(ap);
+	yyerror(errbuf);
+	exit(1);
 }

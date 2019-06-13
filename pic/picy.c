@@ -792,7 +792,7 @@ yyerrlab:
 	switch(yym) {
 		
 case 3:
-{ ERROR "syntax error" WARNING; } break;
+{ error("syntax error"); } break;
 case 6:
 { codegen = 1; makeiattr(0, 0); } break;
 case 7:
@@ -1021,11 +1021,11 @@ case 144:
 { yyval.f = yypt[-2].yyv.f * yypt[-0].yyv.f; } break;
 case 145:
 { if (yypt[-0].yyv.f == 0.0) {
-					ERROR "division by 0" WARNING; yypt[-0].yyv.f = 1; }
+					error("division by 0"); yypt[-0].yyv.f = 1; }
 				  yyval.f = yypt[-2].yyv.f / yypt[-0].yyv.f; } break;
 case 146:
 { if ((long)yypt[-0].yyv.f == 0) {
-					ERROR "mod division by 0" WARNING; yypt[-0].yyv.f = 1; }
+					error("mod division by 0"); yypt[-0].yyv.f = 1; }
 				  yyval.f = (long)yypt[-2].yyv.f % (long)yypt[-0].yyv.f; } break;
 case 147:
 { yyval.f = -yypt[-0].yyv.f; } break;

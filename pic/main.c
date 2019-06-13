@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
 void fpecatch(int n)
 {
-	ERROR "floating point exception %d", n FATAL;
+	fatal("floating point exception %d", n);
 }
 
 char *grow(char *ptr, char *name, int num, int size)	/* make array bigger */
@@ -111,7 +111,7 @@ char *grow(char *ptr, char *name, int num, int size)	/* make array bigger */
 	else
 		p = realloc(ptr, num * size);
 	if (p == NULL)
-		ERROR "can't grow %s to %d", name, num * size FATAL;
+		fatal("can't grow %s to %d", name, num * size);
 	return p;
 }
 
@@ -204,7 +204,7 @@ void getdata(void)
 				svfile = *curfile;
 				sscanf(p, "%s", buf1);
 				if ((curfile->fin=fopen(buf1, "r")) == NULL)
-					ERROR "can't open %s", buf1 FATAL;
+					fatal("can't open %s", buf1);
 				curfile->fname = tostring(buf1);
 				getdata();
 				fclose(curfile->fin);

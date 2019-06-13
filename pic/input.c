@@ -22,7 +22,7 @@ int	baldelim(int, char *);
 void pushsrc(int type, char *ptr)	/* new input source */
 {
 	if (++srcp >= src + MAXSRC)
-		ERROR "inputs nested too deep" FATAL;
+		fatal("inputs nested too deep");
 	srcp->type = type;
 	srcp->sp = ptr;
 	if (dbg > 1) {
@@ -47,7 +47,7 @@ void pushsrc(int type, char *ptr)	/* new input source */
 			printf("push free <%s>\n", ptr);
 			break;
 		default:
-			ERROR "pushed bad type %d", srcp->type FATAL;
+			fatal("pushed bad type %d", srcp->type);
 		}
 	}
 }
@@ -55,7 +55,7 @@ void pushsrc(int type, char *ptr)	/* new input source */
 void popsrc(void)	/* restore an old one */
 {
 	if (srcp <= src)
-		ERROR "too many inputs popped" FATAL;
+		fatal("too many inputs popped");
 	if (dbg > 1) {
 		printf("%3d ", srcp - src);
 		switch (srcp->type) {
@@ -78,7 +78,7 @@ void popsrc(void)	/* restore an old one */
 			printf("pop free\n");
 			break;
 		default:
-			ERROR "pop weird input %d", srcp->type FATAL;
+			fatal("pop weird input %d", srcp->type);
 		}
 	}
 	srcp--;
@@ -94,7 +94,7 @@ void definition(char *s)	/* collect definition for s and install */
 	stp = lookup(s);
 	if (stp != NULL) {	/* it's there before */
 		if (stp->s_type != DEFNAME) {
-			ERROR "%s used as variable and definition", s WARNING;
+			error("%s used as variable and definition", s);
 			return;
 		}
 		free(stp->s_val.p);
@@ -134,7 +134,7 @@ char *delimstr(char *s)	/* get body of X ... X */
 			p = buf + n;
 		}
 		if (c == EOF)
-			ERROR "end of file in %s %c %.20s... %c", s, delim, buf, delim FATAL;
+			fatal("end of file in %s %c %.20s... %c", s, delim, buf, delim);
 		*p++ = c;
 	}
 	*p = '\0';
@@ -172,10 +172,10 @@ void dodef(struct symtab *stp)	/* collect args and switch input to defn */
 
 	ap = argfp+1;
 	if (ap >= args+10)
-		ERROR "arguments too deep" FATAL;
+		fatal("arguments too deep");
 	argcnt = 0;
 	if (input() != '(')
-		ERROR "disaster in dodef" FATAL;
+		fatal("disaster in dodef");
 	if (ap->argval == 0)
 		ap->argval = malloc(1000);
 	for (p = ap->argval; (len = getarg(p)) != -1; p += len) {
@@ -200,7 +200,7 @@ getarg(char *p)	/* pick up single argument, store in p, return length */
 	for ( ;; ) {
 		c = input();
 		if (c == EOF)
-			ERROR "end of file in getarg" FATAL;
+			fatal("end of file in getarg");
 		if (npar == 0 && (c == ',' || c == ')'))
 			break;
 		if (c == '"')	/* copy quoted stuff intact */
@@ -286,7 +286,7 @@ nextchar(void)
 		c = *srcp->sp++;
 		if (c == '\0') {
 			if (--argfp < args)
-				ERROR "argfp underflow" FATAL;
+				fatal("argfp underflow");
 			popsrc();
 			goto loop;
 		} else if (c == '$' && isdigit(*srcp->sp)) {
@@ -302,7 +302,7 @@ nextchar(void)
 		c = getc(curfile->fin);
 		if (c == EOF) {
 			if (curfile == infile)
-				ERROR "end of file inside .PS/.PE" FATAL;
+				fatal("end of file inside .PS/.PE");
 			if (curfile->fin != stdin) {
 				fclose(curfile->fin);
 				free(curfile->fname);	/* assumes allocated */
@@ -333,7 +333,7 @@ void do_thru(void)	/* read one line, make into a macro expansion */
 
 	ap = argfp+1;
 	if (ap >= args+10)
-		ERROR "arguments too deep" FATAL;
+		fatal("arguments too deep");
 	if (ap->argval == NULL)
 		ap->argval = malloc(1000);
 	p = ap->argval;
@@ -371,7 +371,7 @@ void do_thru(void)	/* read one line, make into a macro expansion */
 		*p++ = '\0';
 	}
 	if (c == EOF)
-		ERROR "unexpected end of file in do_thru" FATAL;
+		fatal("unexpected end of file in do_thru");
 	if (argcnt == 0) {	/* ignore blank line */
 		pushsrc(Thru, (char *) 0);
 		return;
@@ -403,7 +403,7 @@ void do_thru(void)	/* read one line, make into a macro expansion */
 unput(int c)
 {
 	if (++pb >= pbuf + sizeof pbuf)
-		ERROR "pushback overflow" FATAL;
+		fatal("pushback overflow");
 	if (--ep < ebuf)
 		ep = ebuf + sizeof(ebuf) - 1;
 	*pb = c;
@@ -422,10 +422,10 @@ double errcheck(double x, char  *s)
 
 	if (errno == EDOM) {
 		errno = 0;
-		ERROR "%s argument out of domain", s WARNING;
+		error("%s argument out of domain", s);
 	} else if (errno == ERANGE) {
 		errno = 0;
-		ERROR "%s result out of range", s WARNING;
+		error("%s result out of range", s);
 	}
 	return x;
 }
@@ -510,7 +510,7 @@ struct symtab *copythru(char *s)	/* collect the macro name or body for thru */
 			p->s_val.p = addnewline(p->s_val.p);
 			return p;
 		} else
-			ERROR "%s used as define and name", s FATAL;
+			fatal("%s used as define and name", s);
 	}
 	/* have to collect the definition */
 	pbstr(s);	/* first char is the delimiter */
@@ -555,7 +555,7 @@ void copy(void)	/* begin input from file, etc. */
 
 	if (newfile) {
 		if ((fin = fopen(newfile, "r")) == NULL)
-			ERROR "can't open file %s", newfile FATAL;
+			fatal("can't open file %s", newfile);
 		curfile++;
 		curfile->fin = fin;
 		curfile->fname = newfile;

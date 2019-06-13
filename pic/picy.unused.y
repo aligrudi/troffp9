@@ -65,7 +65,7 @@ extern	int	yylex(void);
 top:
 	  piclist
 	| /* empty */
-	| error		{ ERROR "syntax error" WARNING; }
+	| error		{ error("syntax error"); }
 	;
 
 piclist:
@@ -289,10 +289,10 @@ expr:
 	| expr '-' expr		{ $$ = $1 - $3; }
 	| expr '*' expr		{ $$ = $1 * $3; }
 	| expr '/' expr		{ if ($3 == 0.0) {
-					ERROR "division by 0" WARNING; $3 = 1; }
+					error("division by 0"); $3 = 1; }
 				  $$ = $1 / $3; }
 	| expr '%' expr		{ if ((long)$3 == 0) {
-					ERROR "mod division by 0" WARNING; $3 = 1; }
+					error("mod division by 0"); $3 = 1; }
 				  $$ = (long)$1 % (long)$3; }
 	| '-' expr %prec UMINUS	{ $$ = -$2; }
 	| '+' expr %prec UMINUS	{ $$ = $2; }

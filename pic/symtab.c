@@ -13,9 +13,9 @@ YYSTYPE getvar(char *s)	/* return value of variable s (usually pointer) */
 	p = lookup(s);
 	if (p == NULL) {
 		if (islower(s[0]))
-			ERROR "no such variable as %s", s WARNING;
+			error("no such variable as %s", s);
 		else
-			ERROR "no such place as %s", s WARNING;
+			error("no such place as %s", s);
 		return(bug);
 	}
 	return(p->s_val);
@@ -48,7 +48,7 @@ struct symtab *makevar(char *s, int t, YYSTYPE v)	/* make variable named s in ta
 	if (p == NULL) {	/* it's a new one */
 		p = (struct symtab *) malloc(sizeof(struct symtab));
 		if (p == NULL)
-			ERROR "out of symtab space with %s", s FATAL;
+			error("out of symtab space with %s", s);
 		p->s_next = stack[nstack].p_symtab;
 		stack[nstack].p_symtab = p;	/* stick it at front */
 	}

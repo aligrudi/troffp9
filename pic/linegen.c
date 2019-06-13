@@ -96,7 +96,7 @@ obj *linegen(int type)
 			}
 			ppos = attr[i].a_val.o;
 			if (ppos == NULL)
-				ERROR "no tag defined for `to'" FATAL;
+				fatal("no tag defined for `to'");
 			dx[ndxy] = ppos->o_x - nx;
 			dy[ndxy] = ppos->o_y - ny;
 			some++;
@@ -110,7 +110,7 @@ obj *linegen(int type)
 			}
 			ppos = ap->a_val.o;
 			if (ppos == NULL)
-				ERROR "no tag defined for `by'" FATAL;
+				fatal("no tag defined for `by'");
 			dx[ndxy] = ppos->o_x;
 			dy[ndxy] = ppos->o_y;
 			some++;
@@ -127,7 +127,7 @@ obj *linegen(int type)
 		case AT:
 			ppos = ap->a_val.o;
 			if (ppos == NULL)
-				ERROR "no tag defined for `from' or `at'" FATAL;
+				fatal("no tag defined for `from' or `at'");
 			nx = curx = ppos->o_x;
 			ny = cury = ppos->o_y;
 			break;
