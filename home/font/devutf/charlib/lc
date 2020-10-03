@@ -1,9 +1,0 @@
-/build_lc {
-    pop
-    /dx size 20 mul 100 div def
-    /dy size 0 mul 100 div def
-
-    dx dy rmoveto
-    (\351) show
-    dx neg dy neg rmoveto
-} def

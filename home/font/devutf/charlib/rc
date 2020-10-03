@@ -1,9 +1,0 @@
-/build_rc {
-    pop
-    /dx size 11 mul 100 div neg def
-    /dy size 0 mul 100 div neg def
-
-    dx dy rmoveto
-    (\371) show
-    dx neg dy neg rmoveto
-} def

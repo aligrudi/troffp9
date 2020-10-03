@@ -1,9 +1,0 @@
-/build_rn {
-    pop
-    /dx size 50 mul 100 div neg def
-    /dy size 0 mul 100 div neg def
-
-    dx dy rmoveto
-    (\140) show
-    dx neg dy neg rmoveto
-} def
