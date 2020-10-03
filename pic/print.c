@@ -6,17 +6,17 @@
 void dotext(obj *);
 void dotline(double, double, double, double, int, double);
 void dotbox(double, double, double, double, int, double);
-void ellipse(double, double, double, double);
-void circle(double, double, double);
-void arc(double, double, double, double, double, double);
+void ellipse(double, double, double, double, int, double);
+void circle(double, double, double, int, double);
+void arc(double, double, double, double, double, double, int, double);
 void arrow(double, double, double, double, double, double, double, int);
 void line(double, double, double, double);
-void box(double, double, double, double);
-void spline(double x, double y, double n, ofloat *p, int dashed, double ddval);
+void box(double, double, double, double, int, double);
+void spline(double x, double y, double n, ofloat *p, int dashed, double ddval, int fill, double fillval);
+void muline(double x, double y, double n, ofloat *p, int fill, double fillval);
 void move(double, double);
 void troff(char *);
 void dot(void);
-void fillstart(double), fillend(int vis, int noedge);
 
 void print(void)
 {
@@ -47,10 +47,8 @@ void print(void)
 			y0 = oy - y1 / 2;
 			x1 = ox + x1 / 2;
 			y1 = oy + y1 / 2;
-			if (fill) {
-				move(x0, y0);
-				fillstart(p->o_fillval);
-			}
+			if (fill)
+				box(x0, y0, x1, y1, 1, p->o_fillval);
 			if (p->o_type == BLOCK)
 				;	/* nothing at all */
 			else if (invis && !fill)
@@ -58,9 +56,7 @@ void print(void)
 			else if (p->o_attr & (DOTBIT|DASHBIT))
 				dotbox(x0, y0, x1, y1, p->o_attr, p->o_ddval);
 			else
-				box(x0, y0, x1, y1);
-			if (fill)
-				fillend(vis, fill);
+				box(x0, y0, x1, y1, 0, 0);
 			move(ox, oy);
 			dotext(p);	/* if there are any text strings */
 			if (ishor(m))
@@ -72,11 +68,9 @@ void print(void)
 			break;
 		case CIRCLE:
 			if (fill)
-				fillstart(p->o_fillval);
-			if (vis || fill)
-				circle(ox, oy, x1);
-			if (fill)
-				fillend(vis, fill);
+				circle(ox, oy, x1, 1, p->o_fillval);
+			if (vis)
+				circle(ox, oy, x1, 0, 0);
 			move(ox, oy);
 			dotext(p);
 			if (ishor(m))
@@ -86,11 +80,9 @@ void print(void)
 			break;
 		case ELLIPSE:
 			if (fill)
-				fillstart(p->o_fillval);
-			if (vis || fill)
-				ellipse(ox, oy, x1, y1);
-			if (fill)
-				fillend(vis, fill);
+				ellipse(ox, oy, x1, y1, 1, p->o_fillval);
+			if (vis)
+				ellipse(ox, oy, x1, y1, 0, 0);
 			move(ox, oy);
 			dotext(p);
 			if (ishor(m))
@@ -99,23 +91,19 @@ void print(void)
 				move(ox, oy - isdown(m) ? y1 : -y1);
 			break;
 		case ARC:
-			if (fill) {
-				move(ox, oy);
-				fillstart(p->o_fillval);
-			}
 			if (p->o_attr & HEAD1)
 				arrow(x1 - (y1 - oy), y1 + (x1 - ox),
 				      x1, y1, p->o_val[4], p->o_val[5], p->o_val[5]/p->o_val[6]/2, p->o_nhead);
+                        if (fill)
+				arc(ox, oy, x1, y1, p->o_val[2], p->o_val[3], 1, p->o_fillval);
                         if (invis && !fill)
                                 /* probably wrong when it's cw */
                                 move(x1, y1);
-                        else
-				arc(ox, oy, x1, y1, p->o_val[2], p->o_val[3]);
+                        else if (vis)
+				arc(ox, oy, x1, y1, p->o_val[2], p->o_val[3], 0, 0);
 			if (p->o_attr & HEAD2)
 				arrow(p->o_val[2] + p->o_val[3] - oy, p->o_val[3] - (p->o_val[2] - ox),
 				      p->o_val[2], p->o_val[3], p->o_val[4], p->o_val[5], -p->o_val[5]/p->o_val[6]/2, p->o_nhead);
-			if (fill)
-				fillend(vis, fill);
 			if (p->o_attr & CW_ARC)
 				move(x1, y1);	/* because drawn backwards */
 			move(ox, oy);
@@ -124,17 +112,20 @@ void print(void)
 		case LINE:
 		case ARROW:
 		case SPLINE:
-			if (fill) {
-				move(ox, oy);
-				fillstart(p->o_fillval);
-			}
 			if (vis && p->o_attr & HEAD1)
 				arrow(ox + p->o_val[5], oy + p->o_val[6], ox, oy, p->o_val[2], p->o_val[3], 0.0, p->o_nhead);
                         if (invis && !fill)
                                 move(x1, y1);
-			else if (p->o_type == SPLINE)
-				spline(ox, oy, p->o_val[4], &p->o_val[5], p->o_attr & (DOTBIT|DASHBIT), p->o_ddval);
-			else {
+			else if (p->o_type == SPLINE) {
+				if (fill)
+					spline(ox, oy, p->o_val[4], &p->o_val[5],
+						p->o_attr & (DOTBIT|DASHBIT), p->o_ddval, 1, p->o_fillval);
+				if (vis)
+					spline(ox, oy, p->o_val[4], &p->o_val[5],
+						p->o_attr & (DOTBIT|DASHBIT), p->o_ddval, 0, 0);
+			} else {
+				if (fill)
+					muline(ox, oy, p->o_val[4], &p->o_val[5], 1, p->o_fillval);
 				dx = ox;
 				dy = oy;
 				for (k=0, j=5; k < p->o_val[4]; k++, j += 2) {
@@ -157,8 +148,6 @@ void print(void)
 				}
 				arrow(dx, dy, x1, y1, p->o_val[2], p->o_val[3], 0.0, p->o_nhead);
 			}
-			if (fill)
-				fillend(vis, fill);
 			move((ox + x1)/2, (oy + y1)/2);	/* center */
 			dotext(p);
 			break;

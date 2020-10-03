@@ -39,6 +39,12 @@ void	hgoto(double), vgoto(double), hmot(double), vmot(double);
 void	move(double, double), movehv(double, double);
 void	cont(double, double);
 
+void line(double x0, double y0, double x1, double y1)	/* draw line from x0,y0 to x1,y1 */
+{
+	move(x0, y0);
+	cont(x1, y1);
+}
+
 void openpl(char *s)	/* initialize device; s is residue of .PS invocation line */
 {
 	double maxw, maxh, ratio = 1;
@@ -216,10 +222,49 @@ void label(char *s, int t, int nh)	/* text s of type t nh half-lines up */
 	flyback();
 }
 
-void line(double x0, double y0, double x1, double y1)	/* draw line from x0,y0 to x1,y1 */
+static char *fillbeg(double fillval)
 {
-	move(x0, y0);
-	cont(x1, y1);
+	static char buf[32];
+	buf[0] = '\0';
+	if (fillval >= 0 && fillval <= 1)
+		sprintf(buf, "\\m[#%02x]", (int) (fillval * 255));
+	return buf;
+}
+
+static char *fillend(double fillval)
+{
+	static char buf[32];
+	buf[0] = '\0';
+	if (fillval >= 0 && fillval <= 1)
+		sprintf(buf, "\\m[]");
+	return buf;
+}
+
+void muline(double x, double y, double n, ofloat *p, int fill, double fillval)
+{
+	int i;
+	double dx, dy;
+	double xerr, yerr;
+
+	move(x, y);
+	hvflush();
+	xerr = yerr = 0.0;
+	if (fill)
+		printf("%s\\D'P ", fillbeg(fillval));
+	for (i = 0; i < 2 * n; i += 2) {
+		dx = xsc(xerr += p[i]);
+		xerr -= dx/xscale;
+		dy = ysc(yerr += p[i+1]);
+		yerr -= dy/yscale;
+		if (!fill)
+			printf("\\D'l ");
+		printf(" %.3fi %.3fi", dx, -dy);	/* WATCH SIGN */
+		if (!fill)
+			printf("'");
+	}
+	if (fill)
+		printf("'%s\n", fillend(fillval));
+	flyback();
 }
 
 void arrow(double x0, double y0, double x1, double y1, double w, double h,
@@ -244,41 +289,23 @@ void arrow(double x0, double y0, double x1, double y1, double w, double h,
 	}
 }
 
-double lastgray = 0;
-
-void fillstart(double v)	/* this works only for postscript, obviously. */
-{				/* uses drechsler's dpost conventions... */
-	hvflush();
-	if (v >= 0 && v <= 1)
-		printf("\\X'BeginObject %g setgray'\n", v);
-	else
-		printf("\\X'BeginObject'\n");
-	lastgray = v;
-	flyback();
-}
-
-void fillend(int vis, int fill)
+void box(double x0, double y0, double x1, double y1, int fill, double fillval)
 {
-	hvflush();
-	if (lastgray >= 0 && lastgray <= 1) {
-		printf("\\X'EndObject gsave eofill grestore %g setgray %s'\n",
-			!vis ? lastgray : 0.0,
-			vis ? "stroke" : "");
-	} else {
-		printf("\\X'EndObject gsave eofill grestore %s'\n", vis ? "stroke" : "");
-	}
-	/* for dashed: [50] 0 setdash just before stroke. */
-	lastgray = 0;
-	flyback();
-}
-
-void box(double x0, double y0, double x1, double y1)
-{
+	double h1, v1;
+	double dh, dv;
 	move(x0, y0);
-	cont(x0, y1);
-	cont(x1, y1);
-	cont(x1, y0);
-	cont(x0, y0);
+	h1 = xconv(x1);
+	v1 = yconv(y1);
+	dh = h1 - hpos;
+	dv = v1 - vpos;
+	hvflush();
+	if (fill) {
+		printf("%s\\D'P 0 %.3fi %.3fi 0 0 %.3fi %.3fi 0'%s\n",
+			fillbeg(fillval), dv, dh, -dv, -dh, fillend(fillval));
+	} else {
+		printf("\\D'p 0 %.3fi %.3fi 0 0 %.3fi %.3fi 0'\n", dv, dh, -dv, -dh);
+	}
+	flyback();	/* expensive */
 }
 
 void cont(double x, double y)	/* continue line from here to x,y */
@@ -297,15 +324,18 @@ void cont(double x, double y)	/* continue line from here to x,y */
 	vpos = v1;
 }
 
-void circle(double x, double y, double r)
+void circle(double x, double y, double r, int fill, double fillval)
 {
 	move(x-r, y);
 	hvflush();
-	printf("\\D'c%.3fi'\n", xsc(2 * r));
+	if (fill)
+		printf("%s\\D'C%.3fi'%s\n", fillbeg(fillval), xsc(2 * r), fillend(fillval));
+	else
+		printf("\\D'c%.3fi'\n", xsc(2 * r));
 	flyback();
 }
 
-void spline(double x, double y, double n, ofloat *p, int dashed, double ddval)
+void spline(double x, double y, double n, ofloat *p, int dashed, double ddval, int fill, double fillval)
 {
 	int i;
 	double dx, dy;
@@ -314,7 +344,10 @@ void spline(double x, double y, double n, ofloat *p, int dashed, double ddval)
 	move(x, y);
 	hvflush();
 	xerr = yerr = 0.0;
-	printf("\\D'~");
+	if (fill)
+		printf("%s\\D'P ~", fillbeg(fillval));
+	else
+		printf("\\D'~");
 	for (i = 0; i < 2 * n; i += 2) {
 		dx = xsc(xerr += p[i]);
 		xerr -= dx/xscale;
@@ -322,29 +355,42 @@ void spline(double x, double y, double n, ofloat *p, int dashed, double ddval)
 		yerr -= dy/yscale;
 		printf(" %.3fi %.3fi", dx, -dy);	/* WATCH SIGN */
 	}
-	printf("'\n");
+	if (fill)
+		printf("'%s\n", fillend(fillval));
+	else
+		printf("'\n");
 	flyback();
 }
 
-void ellipse(double x, double y, double r1, double r2)
+void ellipse(double x, double y, double r1, double r2, int fill, double fillval)
 {
 	double ir1, ir2;
-
 	move(x-r1, y);
 	hvflush();
 	ir1 = xsc(r1);
 	ir2 = ysc(r2);
-	printf("\\D'e%.3fi %.3fi'\n", 2 * ir1, 2 * abs(ir2));
+	if (fill) {
+		printf("%s\\D'E%.3fi %.3fi'%s\n",
+			fillbeg(fillval), 2 * ir1, 2 * abs(ir2), fillend(fillval));
+	} else {
+		printf("\\D'e%.3fi %.3fi'\n", 2 * ir1, 2 * abs(ir2));
+	}
 	flyback();
 }
 
-void arc(double x, double y, double x0, double y0, double x1, double y1)	/* draw arc with center x,y */
+void arc(double x, double y, double x0, double y0, double x1, double y1, int fill, double fillval)	/* draw arc with center x,y */
 {
 
 	move(x0, y0);
 	hvflush();
-	printf("\\D'a%.3fi %.3fi %.3fi %.3fi'\n",
-		xsc(x-x0), -ysc(y-y0), xsc(x1-x), -ysc(y1-y));	/* WATCH SIGNS */
+	if (fill) {
+		printf("%s\\D'P a %.3fi %.3fi %.3fi %.3fi'%s\n",
+			fillbeg(fillval), xsc(x-x0), -ysc(y-y0),
+			xsc(x1-x), -ysc(y1-y), fillend(fillval));	/* WATCH SIGNS */
+	} else {
+		printf("\\D'a%.3fi %.3fi %.3fi %.3fi'\n",
+			xsc(x-x0), -ysc(y-y0), xsc(x1-x), -ysc(y1-y));	/* WATCH SIGNS */
+	}
 	flyback();
 }
 
