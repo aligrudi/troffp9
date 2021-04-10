@@ -22,7 +22,8 @@ char *gets1(char *s, int size)
 			return 0;
 	}
 	nbl = strlen(s);
-	s[nbl - 1] = '\0';	/* remove the newline */
+	if (s[nbl - 1] == '\n')
+		s[nbl - 1] = '\0';	/* remove the newline */
 	s += nbl - 2;
 	for (nbl = 0; s > ns && *s == '\\'; s--)
 		nbl++;
