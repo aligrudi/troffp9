@@ -41,6 +41,7 @@ getcomm(void)
 	texname = texstr[texct=0];
 	tab = '\t';
 	fprintf(tabout, ".nr %d \\n(.s\n", LSIZE);
+	fprintf(tabout, ".af %d 01\n", LSIZE);
 	gets1(line, sizeof(line));
 	/* see if this is a command line */
 	if (strchr(line, ';') == 0) {

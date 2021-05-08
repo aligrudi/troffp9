@@ -130,7 +130,7 @@ drawline(int i, int cl, int cr, int lintype, int noheight, int shortl)
 			}
 		} else
 			fprintf(tabout, "\\h'|\\n(%2su'", reg(cl, CLEFT));
-		fprintf(tabout, "\\s\\n(%d", LSIZE);
+		fprintf(tabout, "\\s(\\n(%d", LSIZE);
 		if (linsize)
 			fprintf(tabout, "\\v'-\\n(%dp/6u'", LSIZE);
 		if (shortl)

@@ -371,7 +371,7 @@ void
 putsize(char *s)
 {
 	if (s && *s)
-		fprintf(tabout, "\\s%s", s);
+		fprintf(tabout, "\\s%s%s", s[1] ? "(" : "", s);
 }
 
 

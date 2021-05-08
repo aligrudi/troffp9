@@ -105,7 +105,7 @@ drawvert(int start, int end, int c, int lwid)
 			fprintf(tabout, "\\v'%s'", exb);
 		if (epb)
 			fprintf(tabout, "\\v'%dp'", epb);
-		fprintf(tabout, "\\s\\n(%d", LSIZE);
+		fprintf(tabout, "\\s(\\n(%d", LSIZE);
 		if (linsize)
 			fprintf(tabout, "\\v'-\\n(%dp/6u'", LSIZE);
 		fprintf(tabout, "\\h'-\\n(#~u'");	 /* adjustment for T450 nroff boxes */
