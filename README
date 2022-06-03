@@ -1,0 +1,5 @@
+TROFFP9
+=======
+
+This is a Linux port of Plan 9 Troff.  The main purpose for this port
+is using its pic and tbl preprocessors with Neatroff.
