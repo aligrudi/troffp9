@@ -1,4 +1,4 @@
-CFLAGS = -Wall -O2
+CFLAGS = -Wall -O2 -std=c89
 LDFLAGS = -lm
 
 OBJS = picy.o picl.o main.o print.o misc.o symtab.o blockgen.o \
