@@ -1,4 +1,4 @@
-CFLAGS = -Wall -O2
+CFLAGS = -Wall -O2 -std=c89
 LDFLAGS =
 
 OBJS = t8.o t4.o t6.o tu.o t5.o t7.o tv.o tg.o t3.o tb.o tt.o t9.o t1.o \
